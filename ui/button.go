@@ -26,8 +26,8 @@ func (b *Button) Draw(context *Context) {
 	rl.DrawRectangleRec(b.RealSize, col)
 }
 
-func (b *Button) Check(area rl.Rectangle) {
-	if rl.CheckCollisionPointRec(rl.GetMousePosition(), area) {
+func (b *Button) Check() {
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), b.RealSize) {
 		if rl.IsMouseButtonPressed(0) {
 			b.OnClick()
 		}
