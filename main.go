@@ -24,8 +24,12 @@ func main() {
 	}
 	b1 := ui.Button{Col: rl.Gray, HoverCol: rl.DarkGray, PressedCol: rl.Black, OnClick: func() {
 		fb1.Elements = append(fb1.Elements, &ui.Box{Col: rl.ColorFromHSV(rand.Float32()*360, 1., 1.)})
+		fb1.Layout(fb1.RealSize)
 	}}
 	b1Area := rl.Rectangle{X: 10, Y: 10, Width: 100, Height: 50}
+
+	fb1.Layout(fb1Area)
+	b1.Layout(b1Area)
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
@@ -33,9 +37,9 @@ func main() {
 		rl.ClearBackground(rl.RayWhite)
 		rl.DrawText("Wunkopolis", 500, 500, 40, rl.Black)
 
-		fb1.Draw(fb1Area, &uiCtx)
+		fb1.Draw(&uiCtx)
 
-		b1.Draw(b1Area, &uiCtx)
+		b1.Draw(&uiCtx)
 		b1.Check(b1Area)
 
 		rl.EndDrawing()

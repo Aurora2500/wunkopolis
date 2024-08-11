@@ -1,7 +1,5 @@
 package ui
 
-import rl "github.com/gen2brain/raylib-go/raylib"
-
 type FlexDirection int
 
 const (
@@ -10,11 +8,13 @@ const (
 )
 
 type Flexbox struct {
+	UIBase
 	Elements []UIElem
 	Dir      FlexDirection
 }
 
-func (fb *Flexbox) Draw(area rl.Rectangle, ctx *Context) {
+func (fb *Flexbox) Layout(area Area) {
+	fb.RealSize = area
 	numElements := float32(len(fb.Elements))
 	elemArea := area
 	if fb.Dir == Row {
@@ -24,11 +24,17 @@ func (fb *Flexbox) Draw(area rl.Rectangle, ctx *Context) {
 	}
 
 	for _, elem := range fb.Elements {
-		elem.Draw(elemArea, ctx)
+		elem.Layout(elemArea)
 		if fb.Dir == Row {
 			elemArea.X = elemArea.X + elemArea.Width
 		} else {
 			elemArea.Y = elemArea.Y + elemArea.Height
 		}
+	}
+}
+
+func (fb *Flexbox) Draw(ctx *Context) {
+	for _, elem := range fb.Elements {
+		elem.Draw(ctx)
 	}
 }
