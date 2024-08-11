@@ -29,7 +29,7 @@ func main() {
 	b1Area := rl.Rectangle{X: 10, Y: 10, Width: 100, Height: 50}
 
 	pc := ui.PieChart{
-		Segments: []ui.PieChartSegment{
+		Segments: []ui.ChartSegment{
 			{N: 10, Col: rl.Red},
 			{N: 6, Col: rl.Green},
 			{N: 3, Col: rl.Blue},
@@ -43,9 +43,25 @@ func main() {
 		Height: 200,
 	}
 
+	tmc := ui.TreemapChart{
+		Segments: []ui.ChartSegment{
+			{N: 10, Col: rl.DarkBlue},
+			{N: 6, Col: rl.DarkGreen},
+			{N: 3, Col: rl.DarkPurple},
+		},
+	}
+
+	tmcArea := ui.Area{
+		X:      1000,
+		Y:      500,
+		Width:  200,
+		Height: 200,
+	}
+
 	fb1.Layout(fb1Area)
 	b1.Layout(b1Area)
 	pc.Layout(pcArea)
+	tmc.Layout(tmcArea)
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
@@ -59,6 +75,7 @@ func main() {
 		b1.Check()
 
 		pc.Draw(&uiCtx)
+		tmc.Draw(&uiCtx)
 
 		rl.EndDrawing()
 	}
