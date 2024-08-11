@@ -1,12 +1,16 @@
 package main
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	"wunkopolis/appstate"
+
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 func RunGame() {
 	rl.InitWindow(1920, 1080, "Wunkopolis")
 	defer rl.CloseWindow()
 
-	appstate := NewAppState()
+	appstate := appstate.NewAppState()
 
 	for !rl.WindowShouldClose() && !appstate.IsEmpty() {
 		appstate.Update()
