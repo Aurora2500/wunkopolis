@@ -40,7 +40,7 @@ func main() {
 		fb1.Draw(&uiCtx)
 
 		b1.Draw(&uiCtx)
-		b1.Check(b1Area)
+		b1.Check()
 
 		rl.EndDrawing()
 	}
