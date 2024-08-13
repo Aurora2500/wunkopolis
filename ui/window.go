@@ -68,6 +68,8 @@ func (w *Window) Update() {
 }
 
 func (w *Window) Draw() {
+	rl.DrawRectangleRec(w.Area, rl.LightGray)
+	rl.DrawRectangleRec(w.barArea(), rl.DarkBlue)
 	contentArea := Area{
 		X:      w.Area.X + borderSize,
 		Y:      w.Area.Y + topBarSize,
