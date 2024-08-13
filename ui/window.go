@@ -25,11 +25,13 @@ func (w *Window) Update() {
 	barArea := w.barArea()
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) && rl.CheckCollisionPointRec(rl.GetMousePosition(), barArea) {
 		w.dragging = true
+		rl.SetMouseCursor(rl.MouseCursorResizeAll)
 		return
 	}
 
 	if w.dragging && rl.IsMouseButtonReleased(rl.MouseButtonLeft) {
 		w.dragging = false
+		rl.SetMouseCursor(rl.MouseCursorArrow)
 		return
 	}
 
