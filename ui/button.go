@@ -4,10 +4,10 @@ import rl "github.com/gen2brain/raylib-go/raylib"
 
 type Button struct {
 	UIBase
-	Col        rl.Color
-	HoverCol   rl.Color
-	PressedCol rl.Color
-	OnClick    func()
+	Base    rl.Texture2D
+	Hover   rl.Texture2D
+	Pressed rl.Texture2D
+	OnClick func()
 }
 
 func (b *Button) Layout(area Area) {
@@ -15,15 +15,16 @@ func (b *Button) Layout(area Area) {
 }
 
 func (b *Button) Draw(context *Context) {
-	col := b.Col
+	texture := b.Base
+	textureRect := rl.Rectangle{X: 0, Y: 0, Width: float32(texture.Width), Height: float32(texture.Height)}
 	if rl.CheckCollisionPointRec(rl.GetMousePosition(), b.RealSize) {
 		if rl.IsMouseButtonDown(0) {
-			col = b.PressedCol
+			texture = b.Pressed
 		} else {
-			col = b.HoverCol
+			texture = b.Hover
 		}
 	}
-	rl.DrawRectangleRec(b.RealSize, col)
+	rl.DrawTexturePro(texture, textureRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
 }
 
 func (b *Button) Check() {
