@@ -2,6 +2,7 @@ package main
 
 import (
 	rand "math/rand"
+	"wunkopolis/assets"
 	"wunkopolis/ui"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -10,6 +11,7 @@ import (
 func main() {
 	rl.InitWindow(1600, 900, "Wunkopolis")
 	defer rl.CloseWindow()
+	defer assets.Manager.Unload()
 
 	uiCtx := ui.Context{}
 	fb1 := ui.Flexbox{

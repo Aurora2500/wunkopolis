@@ -1,15 +1,17 @@
 package assets
 
 import (
-	"io/fs"
-	"log"
 	"os"
+	"path"
+
+	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 var Manager AssetManager
 
 type AssetManager struct {
-	assetDir fs.FS
+	assetDir       string
+	loadedTextures map[string]rl.Texture2D
 }
 
 func init() {
@@ -17,13 +19,26 @@ func init() {
 	if err != nil {
 		panic("Couldn't get base path for the game executable")
 	}
-	baseFS := os.DirFS(basePath)
 
-	assetDir, err := fs.Sub(baseFS, "assets")
-	if err != nil {
-		log.Fatal("No assets directory found")
-	} else {
-		Manager.assetDir = assetDir
+	assetDir := path.Join(basePath, "data")
+
+	Manager.assetDir = assetDir
+}
+
+func (am *AssetManager) GetTexture(name string) rl.Texture2D {
+	tex, ok := am.loadedTextures[name]
+	if ok {
+		return tex
 	}
 
+	imagePath := path.Join(am.assetDir, name+".png")
+	tex = rl.LoadTexture(imagePath)
+	am.loadedTextures[name] = tex
+	return tex
+}
+
+func (am *AssetManager) Unload() {
+	for _, tex := range am.loadedTextures {
+		rl.UnloadTexture(tex)
+	}
 }
