@@ -1,7 +1,6 @@
 package main
 
 import (
-	rand "math/rand"
 	"wunkopolis/ui"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -12,71 +11,23 @@ func main() {
 	defer rl.CloseWindow()
 
 	uiCtx := ui.Context{}
-	fb1 := ui.Flexbox{
-		Elements: []ui.UIElem{},
+	np1Size := rl.Rectangle{
+		X:      225,
+		Y:      150,
+		Width:  350,
+		Height: 600,
 	}
+	np1 := ui.NPatchBox{Texture: rl.LoadTexture("sprites/Panel.png"), NPatchInfo: rl.NPatchInfo{Left: 8, Right: 8, Top: 8, Bottom: 8, Source: rl.Rectangle{Width: 128, Height: 128}}}
 
-	fb1Area := rl.Rectangle{
-		X:      500,
-		Y:      600,
-		Width:  1000,
-		Height: 300,
-	}
-	b1 := ui.Button{Col: rl.Gray, HoverCol: rl.DarkGray, PressedCol: rl.Black, OnClick: func() {
-		fb1.Elements = append(fb1.Elements, &ui.Box{Col: rl.ColorFromHSV(rand.Float32()*360, 1., 1.)})
-		fb1.Layout(fb1.RealSize)
-	}}
-	b1Area := rl.Rectangle{X: 10, Y: 10, Width: 100, Height: 50}
-
-	pc := ui.PieChart{
-		Segments: []ui.ChartSegment{
-			{N: 10, Col: rl.Red},
-			{N: 6, Col: rl.Green},
-			{N: 3, Col: rl.Blue},
-		},
-	}
-
-	pcArea := ui.Area{
-		X:      1000,
-		Y:      200,
-		Width:  200,
-		Height: 200,
-	}
-
-	tmc := ui.TreemapChart{
-		Segments: []ui.ChartSegment{
-			{N: 10, Col: rl.DarkBlue},
-			{N: 6, Col: rl.DarkGreen},
-			{N: 3, Col: rl.DarkPurple},
-		},
-	}
-
-	tmcArea := ui.Area{
-		X:      1000,
-		Y:      500,
-		Width:  200,
-		Height: 200,
-	}
-
-	fb1.Layout(fb1Area)
-	b1.Layout(b1Area)
-	pc.Layout(pcArea)
-	tmc.Layout(tmcArea)
-
+	np1.Layout(np1Size)
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
-		rl.DrawText("Wunkopolis", 500, 500, 40, rl.Black)
 
-		fb1.Draw(&uiCtx)
+		np1.Draw(&uiCtx)
 
-		b1.Draw(&uiCtx)
-		b1.Check()
-
-		pc.Draw(&uiCtx)
-		tmc.Draw(&uiCtx)
-
+		rl.DrawText("Wunkopolis", 285, 200, 40, rl.Black)
 		rl.EndDrawing()
 	}
 }
