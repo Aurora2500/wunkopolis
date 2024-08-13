@@ -12,17 +12,6 @@ func main() {
 	defer rl.CloseWindow()
 	defer assets.Manager.Unload()
 
-	uiCtx := ui.Context{}
-	np1Size := rl.Rectangle{
-		X:      225,
-		Y:      150,
-		Width:  350,
-		Height: 600,
-	}
-	np1 := ui.NPatchBox{Texture: rl.LoadTexture("sprites/Panel.png"), NPatchInfo: rl.NPatchInfo{Left: 8, Right: 8, Top: 8, Bottom: 8, Source: rl.Rectangle{Width: 128, Height: 128}}}
-
-	np1.Layout(np1Size)
-
 	w1 := ui.Window{
 		Area: ui.Area{
 			X:      600,
@@ -39,13 +28,12 @@ func main() {
 			},
 		},
 	}
+	w1.Setup()
 	for !rl.WindowShouldClose() {
 		w1.Update()
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
-
-		np1.Draw(&uiCtx)
 
 		w1.Draw()
 

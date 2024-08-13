@@ -1,6 +1,7 @@
 package assets
 
 import (
+	"log"
 	"os"
 	"path"
 
@@ -15,7 +16,7 @@ type AssetManager struct {
 }
 
 func init() {
-	basePath, err := os.Executable()
+	basePath, err := os.Getwd()
 	if err != nil {
 		panic("Couldn't get base path for the game executable")
 	}
@@ -23,9 +24,11 @@ func init() {
 	assetDir := path.Join(basePath, "data")
 
 	Manager.assetDir = assetDir
+	Manager.loadedTextures = make(map[string]rl.Texture2D)
 }
 
 func (am *AssetManager) GetTexture(name string) rl.Texture2D {
+	log.Default().Println("Loading texture " + name)
 	tex, ok := am.loadedTextures[name]
 	if ok {
 		return tex
