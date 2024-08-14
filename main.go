@@ -21,10 +21,11 @@ func main() {
 		},
 		Content: &ui.FancyPieChart{
 			Segments: []ui.ChartSegment{
-				{Col: rl.DarkGreen, N: 10},
-				{Col: rl.DarkPurple, N: 6},
-				{Col: rl.DarkBrown, N: 4},
+				{Col: rl.DarkGreen, N: 3},
+				{Col: rl.DarkPurple, N: 2},
+				{Col: rl.DarkBrown, N: 1},
 				{Col: rl.DarkGray, N: 1},
+				{Col: rl.Blue, N: 2},
 			},
 			Height:      40,
 			Perspective: 76,

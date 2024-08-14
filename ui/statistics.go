@@ -120,8 +120,8 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 	// draw bottom part
 	angle := pieChartStartAngle * rl.Deg2rad
 	fan := make([]Vector2, 1, totalsegments)
-	fan[0] = bottomCenter
 	visible := false
+	fan[0] = topCenter
 	for _, segment := range pc.Segments {
 		portion := float64(segment.N / total * 2 * math.Pi)
 		if !visible {
@@ -165,6 +165,12 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 				X: topCenter.X + radius,
 				Y: topCenter.Y,
 			})
+		}
+		fan[0].X = fan[1].X
+		fan[len(fan)-1].Y = topCenter.Y
+		fan[len(fan)-2].X = fan[len(fan)-1].X
+		if fan[0].Y > center.Y && fan[0].X < center.X {
+			fan[0].X = fan[len(fan)-1].X
 		}
 		rl.DrawTriangleFan(fan, col)
 		angle = angle + portion
