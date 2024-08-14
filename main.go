@@ -19,13 +19,16 @@ func main() {
 			Width:  480,
 			Height: 360,
 		},
-		Content: &ui.PieChart{
+		Content: &ui.FancyPieChart{
 			Segments: []ui.ChartSegment{
 				{Col: rl.DarkGreen, N: 10},
 				{Col: rl.DarkPurple, N: 6},
 				{Col: rl.DarkBrown, N: 4},
 				{Col: rl.DarkGray, N: 1},
 			},
+			Height:      40,
+			Perspective: 76,
+			Tint:        0.7,
 		},
 	}
 	w1.Setup()
