@@ -1,7 +1,9 @@
-package ui
+package statistics
 
 import (
 	"math"
+
+	ui "wunkopolis/ui"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -15,17 +17,17 @@ const totalsegments = 256
 const pieChartStartAngle = -90.
 
 type PieChart struct {
-	UIBase
+	ui.UIBase
 	Segments []ChartSegment
 }
 
-func (pc *PieChart) Layout(area Area) {
+func (pc *PieChart) Layout(area ui.Area) {
 	pc.RealSize = area
 }
 
-func (pc *PieChart) Draw(ctx *Context) {
+func (pc *PieChart) Draw(ctx *ui.Context) {
 	radius := min(pc.RealSize.Height, pc.RealSize.Width) / 2
-	center := AreaCenter(pc.RealSize)
+	center := ui.AreaCenter(pc.RealSize)
 
 	var total float32
 
@@ -43,15 +45,15 @@ func (pc *PieChart) Draw(ctx *Context) {
 }
 
 type TreemapChart struct {
-	UIBase
+	ui.UIBase
 	Segments []ChartSegment
 }
 
-func (tmc *TreemapChart) Layout(area Area) {
+func (tmc *TreemapChart) Layout(area ui.Area) {
 	tmc.RealSize = area
 }
 
-func (tmc *TreemapChart) Draw(ctx *Context) {
+func (tmc *TreemapChart) Draw(ctx *ui.Context) {
 	var total float32
 
 	for _, segment := range tmc.Segments {
@@ -89,21 +91,21 @@ func (tmc *TreemapChart) Draw(ctx *Context) {
 }
 
 type FancyPieChart struct {
-	UIBase
+	ui.UIBase
 	Segments    []ChartSegment
 	Height      float32
 	Perspective float32
 	Tint        float32
 }
 
-func (pc *FancyPieChart) Layout(area Area) {
+func (pc *FancyPieChart) Layout(area ui.Area) {
 	pc.RealSize = area
 }
 
-func (pc *FancyPieChart) Draw(ctx *Context) {
+func (pc *FancyPieChart) Draw(ctx *ui.Context) {
 	radius := min(pc.RealSize.Height, pc.RealSize.Width) / 2
 	height := pc.Height * float32(math.Sin(float64(pc.Perspective*rl.Deg2rad)))
-	center := AreaCenter(pc.RealSize)
+	center := ui.AreaCenter(pc.RealSize)
 	squish := float32(math.Cos(float64(pc.Perspective * rl.Deg2rad)))
 
 	topCenter := center
@@ -118,7 +120,7 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 
 	// draw bottom part
 	angle := pieChartStartAngle * rl.Deg2rad
-	fan := make([]Vector2, 1, totalsegments)
+	fan := make([]ui.Vector2, 1, totalsegments)
 	visible := false
 	fan[0] = topCenter
 	for _, segment := range pc.Segments {
@@ -136,10 +138,10 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 		deltaAngle := portion / float64(numPoints)
 		// check left wall
 		if angle+portion > math.Pi {
-			fan = append(fan, Vector2{
+			fan = append(fan, ui.Vector2{
 				X: topCenter.X - radius,
 				Y: topCenter.Y,
-			}, Vector2{
+			}, ui.Vector2{
 				X: bottomCenter.X - radius,
 				Y: bottomCenter.Y,
 			})
@@ -149,17 +151,17 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 			if a < 0 || a > math.Pi {
 				continue
 			}
-			fan = append(fan, Vector2{
+			fan = append(fan, ui.Vector2{
 				X: bottomCenter.X + radius*float32(math.Cos(a)),
 				Y: bottomCenter.Y + squish*radius*float32(math.Sin(a)),
 			})
 		}
 		// check right wall
 		if angle < 0 {
-			fan = append(fan, Vector2{
+			fan = append(fan, ui.Vector2{
 				X: bottomCenter.X + radius,
 				Y: bottomCenter.Y,
-			}, Vector2{
+			}, ui.Vector2{
 				X: topCenter.X + radius,
 				Y: topCenter.Y,
 			})
@@ -189,7 +191,7 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 		deltaAngle := portion / float64(numPoints)
 		for i := range numPoints + 1 {
 			a := angle + float64(numPoints-i)*deltaAngle
-			fan = append(fan, Vector2{
+			fan = append(fan, ui.Vector2{
 				X: topCenter.X + radius*float32(math.Cos(a)),
 				Y: topCenter.Y + squish*radius*float32(math.Sin(a)),
 			})

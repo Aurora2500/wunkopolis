@@ -3,6 +3,7 @@ package main
 import (
 	"wunkopolis/assets"
 	"wunkopolis/ui"
+	stat "wunkopolis/ui/statistics"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -19,8 +20,8 @@ func main() {
 			Width:  900,
 			Height: 700,
 		},
-		Content: &ui.FancyPieChart{
-			Segments: []ui.ChartSegment{
+		Content: &stat.FancyPieChart{
+			Segments: []stat.ChartSegment{
 				{Col: rl.DarkGreen, N: 3},
 				{Col: rl.DarkPurple, N: 2},
 				{Col: rl.DarkBrown, N: 1},
