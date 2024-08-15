@@ -20,6 +20,7 @@ var topBarColor = rl.Color{
 type Window struct {
 	Content    UIElem
 	Title      string
+	Icon       rl.Texture2D
 	Area       Area
 	dragging   bool
 	hidden     bool
@@ -36,7 +37,7 @@ func (w *Window) barArea() Area {
 	}
 }
 
-func (w *Window) Setup() {
+func (w *Window) Setup(bottomBar *Bar) {
 	bgtex := assets.Manager.GetTexture("Panel")
 
 	w.background = NPatchBox{
@@ -57,6 +58,7 @@ func (w *Window) Setup() {
 		hover:   assets.Manager.GetTexture("ButtonHover"),
 		pressed: assets.Manager.GetTexture("ButtonPressed"),
 		Icon:    assets.Manager.GetTexture("x"), OnClick: func() { w.HideShow() }}
+	bottomBar.AddButton(Button{Icon: w.Icon, OnClick: w.HideShow})
 }
 
 func (w *Window) Update() {
@@ -83,7 +85,7 @@ func (w *Window) Update() {
 	}
 }
 
-func (w *Window) Draw() {
+func (w *Window) Draw(font rl.Font) {
 	if w.hidden {
 		return
 	}
@@ -101,6 +103,7 @@ func (w *Window) Draw() {
 	w.background.Draw(&ctx)
 	w.Content.Draw(&ctx)
 	rl.DrawRectangleRec(w.barArea(), topBarColor)
+	rl.DrawTextEx(font, w.Title, rl.Vector2{X: w.barArea().X + 8, Y: w.barArea().Y + 8}, 40, 0, rl.White)
 	w.button.Draw(&ctx)
 	w.button.Update()
 }

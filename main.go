@@ -8,6 +8,7 @@ import (
 )
 
 var backgroundColor = rl.Color{R: 0, G: 130, B: 120, A: 255}
+var Font rl.Font
 
 func main() {
 	rl.InitWindow(0, 0, "Wunkopolis")
@@ -16,6 +17,7 @@ func main() {
 
 	rl.SetTargetFPS(60)
 	rl.ToggleFullscreen()
+	Font = assets.Manager.GetFont("W95FA")
 	bottomBar := ui.Bar{}
 
 	w1 := ui.Window{
@@ -37,10 +39,11 @@ func main() {
 			Perspective: 76,
 			Tint:        0.7,
 		},
+		Icon:  assets.Manager.GetTexture("Statistics"),
+		Title: "Statistics",
 	}
 	bottomBar.Setup()
-	bottomBar.AddButton(ui.Button{Icon: assets.Manager.GetTexture("Statistics"), OnClick: func() { w1.HideShow() }})
-	w1.Setup()
+	w1.Setup(&bottomBar)
 	for !rl.WindowShouldClose() {
 		w1.Update()
 		rl.BeginDrawing()
@@ -48,7 +51,7 @@ func main() {
 		rl.ClearBackground(backgroundColor)
 		bottomBar.Draw()
 		bottomBar.Update()
-		w1.Draw()
+		w1.Draw(Font)
 
 		rl.EndDrawing()
 	}
