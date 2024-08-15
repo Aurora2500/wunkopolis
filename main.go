@@ -10,13 +10,12 @@ import (
 var backgroundColor = rl.Color{R: 0, G: 130, B: 120, A: 255}
 
 func main() {
-	rl.InitWindow(1920, 1080, "Wunkopolis")
+	rl.InitWindow(0, 0, "Wunkopolis")
 	defer rl.CloseWindow()
 	defer assets.Manager.Unload()
 
 	rl.SetTargetFPS(60)
-	rl.ToggleBorderlessWindowed()
-
+	rl.ToggleFullscreen()
 	bottomBar := ui.Bar{}
 
 	w1 := ui.Window{
