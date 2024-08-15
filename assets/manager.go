@@ -25,6 +25,7 @@ func init() {
 
 	Manager.assetDir = assetDir
 	Manager.loadedTextures = make(map[string]rl.Texture2D)
+	Manager.loadedFonts = make(map[string]rl.Font)
 }
 
 func (am *AssetManager) GetTexture(name string) rl.Texture2D {
