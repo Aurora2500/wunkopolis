@@ -15,7 +15,7 @@ func main() {
 	defer assets.Manager.Unload()
 
 	rl.SetTargetFPS(60)
-	rl.ToggleFullscreen()
+	rl.ToggleBorderlessWindowed()
 
 	bottomBar := ui.Bar{}
 
