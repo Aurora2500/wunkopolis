@@ -40,6 +40,7 @@ func main() {
 		},
 	}
 	bottomBar.Setup()
+	bottomBar.AddButton(ui.Button{Icon: assets.Manager.GetTexture("Statistics"), OnClick: func() { w1.HideShow() }})
 	w1.Setup()
 	for !rl.WindowShouldClose() {
 		w1.Update()
@@ -47,6 +48,7 @@ func main() {
 
 		rl.ClearBackground(backgroundColor)
 		bottomBar.Draw()
+		bottomBar.Update()
 		w1.Draw()
 
 		rl.EndDrawing()

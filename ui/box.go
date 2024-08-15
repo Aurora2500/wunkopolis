@@ -18,3 +18,7 @@ func (b *Box) Draw(ctx *Context) {
 func (b *Box) GetSize() Area {
 	return b.RealSize
 }
+
+func (b *Box) Update() {
+
+}

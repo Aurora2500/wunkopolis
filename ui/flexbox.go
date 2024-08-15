@@ -35,6 +35,12 @@ func (fb *Flexbox) Layout(area Area) {
 	}
 }
 
+func (fb *Flexbox) Update() {
+	for _, elem := range fb.Elements {
+		elem.Update()
+	}
+}
+
 func (fb *Flexbox) Draw(ctx *Context) {
 	for _, elem := range fb.Elements {
 		elem.Draw(ctx)

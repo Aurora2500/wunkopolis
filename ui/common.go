@@ -9,6 +9,7 @@ type UIElem interface {
 	Layout(area Area)
 	Draw(context *Context)
 	GetSize() Area
+	Update()
 }
 
 type UIBase struct {

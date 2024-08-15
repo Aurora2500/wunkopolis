@@ -56,7 +56,7 @@ func (w *Window) Setup() {
 		base:    assets.Manager.GetTexture("Button"),
 		hover:   assets.Manager.GetTexture("ButtonHover"),
 		pressed: assets.Manager.GetTexture("ButtonPressed"),
-		icon:    assets.Manager.GetTexture("x"), onClick: func() { w.Hide() }}
+		Icon:    assets.Manager.GetTexture("x"), OnClick: func() { w.HideShow() }}
 }
 
 func (w *Window) Update() {
@@ -102,9 +102,9 @@ func (w *Window) Draw() {
 	w.Content.Draw(&ctx)
 	rl.DrawRectangleRec(w.barArea(), topBarColor)
 	w.button.Draw(&ctx)
-	w.button.Check()
+	w.button.Update()
 }
 
-func (w *Window) Hide() {
-	w.hidden = true
+func (w *Window) HideShow() {
+	w.hidden = !w.hidden
 }

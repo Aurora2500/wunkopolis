@@ -19,3 +19,7 @@ func (b *NPatchBox) Draw(ctx *Context) {
 func (b *NPatchBox) GetSize() Area {
 	return b.RealSize
 }
+
+func (b *NPatchBox) Update() {
+
+}

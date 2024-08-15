@@ -11,8 +11,8 @@ type Button struct {
 	base    rl.Texture2D
 	hover   rl.Texture2D
 	pressed rl.Texture2D
-	icon    rl.Texture2D
-	onClick func()
+	Icon    rl.Texture2D
+	OnClick func()
 }
 
 func (b *Button) Layout(area Area) {
@@ -33,13 +33,13 @@ func (b *Button) Draw(context *Context) {
 		}
 	}
 	rl.DrawTexturePro(texture, textureRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
-	rl.DrawTexturePro(b.icon, textureRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
+	rl.DrawTexturePro(b.Icon, textureRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
 }
 
-func (b *Button) Check() {
+func (b *Button) Update() {
 	if rl.CheckCollisionPointRec(rl.GetMousePosition(), b.RealSize) {
 		if rl.IsMouseButtonReleased(0) {
-			b.onClick()
+			b.OnClick()
 		}
 	}
 }

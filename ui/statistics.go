@@ -27,6 +27,10 @@ func (pc *PieChart) GetSize() Area {
 	return pc.RealSize
 }
 
+func (pc *PieChart) Update() {
+
+}
+
 func (pc *PieChart) Draw(ctx *Context) {
 	radius := min(pc.RealSize.Height, pc.RealSize.Width) / 2
 	center := AreaCenter(pc.RealSize)
@@ -57,6 +61,10 @@ func (tmc *TreemapChart) Layout(area Area) {
 
 func (tmc *TreemapChart) GetSize() Area {
 	return tmc.RealSize
+}
+
+func (tmc *TreemapChart) Update() {
+
 }
 
 func (tmc *TreemapChart) Draw(ctx *Context) {
@@ -110,6 +118,10 @@ func (pc *FancyPieChart) Layout(area Area) {
 
 func (pc *FancyPieChart) GetSize() Area {
 	return pc.RealSize
+}
+
+func (pc *FancyPieChart) Update() {
+
 }
 
 func (pc *FancyPieChart) Draw(ctx *Context) {
