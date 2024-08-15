@@ -105,7 +105,6 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 	height := pc.Height * float32(math.Sin(float64(pc.Perspective*rl.Deg2rad)))
 	center := AreaCenter(pc.RealSize)
 	squish := float32(math.Cos(float64(pc.Perspective * rl.Deg2rad)))
-	println(height)
 
 	topCenter := center
 	topCenter.Y = topCenter.Y - height/2
@@ -150,7 +149,6 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 			if a < 0 || a > math.Pi {
 				continue
 			}
-			println(a)
 			fan = append(fan, Vector2{
 				X: bottomCenter.X + radius*float32(math.Cos(a)),
 				Y: bottomCenter.Y + squish*radius*float32(math.Sin(a)),

@@ -14,10 +14,10 @@ func main() {
 
 	w1 := ui.Window{
 		Area: ui.Area{
-			X:      600,
-			Y:      300,
-			Width:  480,
-			Height: 360,
+			X:      0,
+			Y:      0,
+			Width:  900,
+			Height: 700,
 		},
 		Content: &ui.FancyPieChart{
 			Segments: []ui.ChartSegment{
@@ -41,7 +41,6 @@ func main() {
 
 		w1.Draw()
 
-		rl.DrawText("Wunkopolis", 285, 200, 40, rl.Black)
 		rl.EndDrawing()
 	}
 }
