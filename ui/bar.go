@@ -11,13 +11,16 @@ type Bar struct {
 	Content Flexbox
 }
 
+const barHeight = 116
+const sideSize = 8
+
 func (b *Bar) Setup() {
 	b.Texture = assets.Manager.GetTexture("Panel")
-	b.NPatchInfo = rl.NPatchInfo{Source: rl.Rectangle{Width: 128, Height: 128}, Left: 8, Right: 8, Bottom: 8, Top: 8}
-	b.RealSize = rl.Rectangle{Width: 1936, Height: 116, X: -8, Y: 976}
+	b.NPatchInfo = rl.NPatchInfo{Source: rl.Rectangle{Width: float32(b.Texture.Width) - sideSize*2, Height: float32(b.Texture.Height), X: sideSize}, Left: sideSize, Right: sideSize, Bottom: sideSize, Top: sideSize}
+	b.RealSize = rl.Rectangle{Width: float32(rl.GetScreenWidth()), Height: barHeight, X: 0, Y: float32(rl.GetScreenHeight()) - barHeight}
 
 	b.Content = Flexbox{Elements: []UIElem{}, Padding: 16}
-	b.Content.Layout(Area{Width: b.RealSize.Width - 32, Height: b.RealSize.Height - 32, X: b.RealSize.X + 12, Y: b.RealSize.Y + 12})
+	b.Content.Layout(Area{Width: b.RealSize.Width, Height: b.RealSize.Height - sideSize*2, X: b.RealSize.X + sideSize, Y: b.RealSize.Y + sideSize})
 }
 
 func (b *Bar) Draw() {
