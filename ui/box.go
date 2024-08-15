@@ -14,3 +14,7 @@ func (b *Box) Layout(area rl.Rectangle) {
 func (b *Box) Draw(ctx *Context) {
 	rl.DrawRectangleRec(b.RealSize, b.Col)
 }
+
+func (b *Box) GetSize() Area {
+	return b.RealSize
+}

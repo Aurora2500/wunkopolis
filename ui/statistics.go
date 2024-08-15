@@ -23,6 +23,10 @@ func (pc *PieChart) Layout(area Area) {
 	pc.RealSize = area
 }
 
+func (pc *PieChart) GetSize() Area {
+	return pc.RealSize
+}
+
 func (pc *PieChart) Draw(ctx *Context) {
 	radius := min(pc.RealSize.Height, pc.RealSize.Width) / 2
 	center := AreaCenter(pc.RealSize)
@@ -49,6 +53,10 @@ type TreemapChart struct {
 
 func (tmc *TreemapChart) Layout(area Area) {
 	tmc.RealSize = area
+}
+
+func (tmc *TreemapChart) GetSize() Area {
+	return tmc.RealSize
 }
 
 func (tmc *TreemapChart) Draw(ctx *Context) {
@@ -100,6 +108,10 @@ func (pc *FancyPieChart) Layout(area Area) {
 	pc.RealSize = area
 }
 
+func (pc *FancyPieChart) GetSize() Area {
+	return pc.RealSize
+}
+
 func (pc *FancyPieChart) Draw(ctx *Context) {
 	radius := min(pc.RealSize.Height, pc.RealSize.Width) / 2
 	height := pc.Height * float32(math.Sin(float64(pc.Perspective*rl.Deg2rad)))
@@ -109,8 +121,7 @@ func (pc *FancyPieChart) Draw(ctx *Context) {
 	topCenter := center
 	topCenter.Y = topCenter.Y - height/2
 	bottomCenter := center
-	bottomCenter.Y = bottomCenter.Y + height/2
-
+	bottomCenter.Y = bottomCenter.Y - height/4
 	var total float32
 	for _, seg := range pc.Segments {
 		total = total + seg.N

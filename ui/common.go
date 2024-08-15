@@ -8,6 +8,7 @@ type Vector2 = rl.Vector2
 type UIElem interface {
 	Layout(area Area)
 	Draw(context *Context)
+	GetSize() Area
 }
 
 type UIBase struct {

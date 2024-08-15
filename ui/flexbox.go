@@ -11,25 +11,27 @@ type Flexbox struct {
 	UIBase
 	Elements []UIElem
 	Dir      FlexDirection
+	Padding  float32
 }
 
 func (fb *Flexbox) Layout(area Area) {
 	fb.RealSize = area
-	numElements := float32(len(fb.Elements))
-	elemArea := area
-	if fb.Dir == Row {
-		elemArea.Width = area.Width / numElements
-	} else {
-		elemArea.Height = area.Height / float32(numElements)
-	}
+
+	elemoffset := Vector2{X: area.X, Y: area.Y}
 
 	for _, elem := range fb.Elements {
-		elem.Layout(elemArea)
+		elem.Layout(Area{
+			Width:  elem.GetSize().Width,
+			Height: elem.GetSize().Height,
+			X:      elemoffset.X,
+			Y:      elemoffset.Y,
+		})
 		if fb.Dir == Row {
-			elemArea.X = elemArea.X + elemArea.Width
+			elemoffset.X = elemoffset.X + elem.GetSize().Width + fb.Padding
 		} else {
-			elemArea.Y = elemArea.Y + elemArea.Height
+			elemoffset.Y = elemoffset.Y + elem.GetSize().Height + fb.Padding
 		}
+
 	}
 }
 
@@ -37,4 +39,8 @@ func (fb *Flexbox) Draw(ctx *Context) {
 	for _, elem := range fb.Elements {
 		elem.Draw(ctx)
 	}
+}
+
+func (fb *Flexbox) GetSize() Area {
+	return fb.RealSize
 }

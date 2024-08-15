@@ -1,7 +1,6 @@
 package assets
 
 import (
-	"log"
 	"os"
 	"path"
 
@@ -28,7 +27,6 @@ func init() {
 }
 
 func (am *AssetManager) GetTexture(name string) rl.Texture2D {
-	log.Default().Println("Loading texture " + name)
 	tex, ok := am.loadedTextures[name]
 	if ok {
 		return tex

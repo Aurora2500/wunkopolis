@@ -1,6 +1,10 @@
 package ui
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	"wunkopolis/assets"
+
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 type Button struct {
 	UIBase
@@ -13,6 +17,9 @@ type Button struct {
 
 func (b *Button) Layout(area Area) {
 	b.RealSize = area
+	b.base = assets.Manager.GetTexture("Button")
+	b.hover = assets.Manager.GetTexture("ButtonHover")
+	b.pressed = assets.Manager.GetTexture("ButtonPressed")
 }
 
 func (b *Button) Draw(context *Context) {
@@ -31,8 +38,12 @@ func (b *Button) Draw(context *Context) {
 
 func (b *Button) Check() {
 	if rl.CheckCollisionPointRec(rl.GetMousePosition(), b.RealSize) {
-		if rl.IsMouseButtonPressed(0) {
+		if rl.IsMouseButtonReleased(0) {
 			b.onClick()
 		}
 	}
+}
+
+func (b *Button) GetSize() Area {
+	return b.RealSize
 }

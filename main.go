@@ -7,17 +7,24 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+var backgroundColor = rl.Color{R: 0, G: 130, B: 120, A: 255}
+
 func main() {
-	rl.InitWindow(1600, 900, "Wunkopolis")
+	rl.InitWindow(1920, 1080, "Wunkopolis")
 	defer rl.CloseWindow()
 	defer assets.Manager.Unload()
+
+	rl.SetTargetFPS(60)
+	rl.ToggleFullscreen()
+
+	bottomBar := ui.Bar{}
 
 	w1 := ui.Window{
 		Area: ui.Area{
 			X:      0,
 			Y:      0,
-			Width:  900,
-			Height: 700,
+			Width:  300,
+			Height: 350,
 		},
 		Content: &ui.FancyPieChart{
 			Segments: []ui.ChartSegment{
@@ -32,13 +39,14 @@ func main() {
 			Tint:        0.7,
 		},
 	}
+	bottomBar.Setup()
 	w1.Setup()
 	for !rl.WindowShouldClose() {
 		w1.Update()
 		rl.BeginDrawing()
 
-		rl.ClearBackground(rl.RayWhite)
-
+		rl.ClearBackground(backgroundColor)
+		bottomBar.Draw()
 		w1.Draw()
 
 		rl.EndDrawing()
