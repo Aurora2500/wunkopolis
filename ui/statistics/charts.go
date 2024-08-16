@@ -25,8 +25,7 @@ func (pc *PieChart) Layout(area ui.Area) {
 	pc.RealSize = area
 }
 
-<<<<<<< HEAD:ui/statistics.go
-func (pc *PieChart) GetSize() Area {
+func (pc *PieChart) GetSize() ui.Area {
 	return pc.RealSize
 }
 
@@ -34,10 +33,7 @@ func (pc *PieChart) Update() {
 
 }
 
-func (pc *PieChart) Draw(ctx *Context) {
-=======
 func (pc *PieChart) Draw(ctx *ui.Context) {
->>>>>>> 54df6bd (started working on stats):ui/statistics/charts.go
 	radius := min(pc.RealSize.Height, pc.RealSize.Width) / 2
 	center := ui.AreaCenter(pc.RealSize)
 
@@ -65,8 +61,7 @@ func (tmc *TreemapChart) Layout(area ui.Area) {
 	tmc.RealSize = area
 }
 
-<<<<<<< HEAD:ui/statistics.go
-func (tmc *TreemapChart) GetSize() Area {
+func (tmc *TreemapChart) GetSize() ui.Area {
 	return tmc.RealSize
 }
 
@@ -74,10 +69,7 @@ func (tmc *TreemapChart) Update() {
 
 }
 
-func (tmc *TreemapChart) Draw(ctx *Context) {
-=======
 func (tmc *TreemapChart) Draw(ctx *ui.Context) {
->>>>>>> 54df6bd (started working on stats):ui/statistics/charts.go
 	var total float32
 
 	for _, segment := range tmc.Segments {
@@ -126,8 +118,7 @@ func (pc *FancyPieChart) Layout(area ui.Area) {
 	pc.RealSize = area
 }
 
-<<<<<<< HEAD:ui/statistics.go
-func (pc *FancyPieChart) GetSize() Area {
+func (pc *FancyPieChart) GetSize() ui.Area {
 	return pc.RealSize
 }
 
@@ -135,10 +126,7 @@ func (pc *FancyPieChart) Update() {
 
 }
 
-func (pc *FancyPieChart) Draw(ctx *Context) {
-=======
 func (pc *FancyPieChart) Draw(ctx *ui.Context) {
->>>>>>> 54df6bd (started working on stats):ui/statistics/charts.go
 	radius := min(pc.RealSize.Height, pc.RealSize.Width) / 2
 	height := pc.Height * float32(math.Sin(float64(pc.Perspective*rl.Deg2rad)))
 	center := ui.AreaCenter(pc.RealSize)
