@@ -24,21 +24,17 @@ func main() {
 		Area: ui.Area{
 			X:      0,
 			Y:      0,
-			Width:  300,
+			Width:  632,
 			Height: 350,
 		},
-		Content: &ui.FancyPieChart{
-			Segments: []ui.ChartSegment{
-				{Col: rl.DarkGreen, N: 3},
-				{Col: rl.DarkPurple, N: 2},
-				{Col: rl.DarkBrown, N: 1},
-				{Col: rl.DarkGray, N: 1},
-				{Col: rl.Blue, N: 2},
-			},
-			Height:      40,
-			Perspective: 76,
-			Tint:        0.7,
-		},
+		Content: &ui.Flexbox{
+			Dir: ui.Col,
+			Elements: []ui.UIElem{
+				&ui.Flexbox{
+					Padding:  4,
+					Elements: []ui.UIElem{&ui.Button{Type: "Long"}, &ui.Button{Type: "Long"}, &ui.Button{Type: "Long"}},
+					Anchor:   ui.Center},
+			}},
 		Icon:  assets.Manager.GetTexture("Statistics"),
 		Title: "Statistics",
 	}

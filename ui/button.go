@@ -11,15 +11,20 @@ type Button struct {
 	base    rl.Texture2D
 	hover   rl.Texture2D
 	pressed rl.Texture2D
+	Scale   float32
+	Type    string
 	Icon    rl.Texture2D
 	OnClick func()
 }
 
 func (b *Button) Layout(area Area) {
-	b.RealSize = area
-	b.base = assets.Manager.GetTexture("Button")
-	b.hover = assets.Manager.GetTexture("ButtonHover")
-	b.pressed = assets.Manager.GetTexture("ButtonPressed")
+	if b.Scale == 0 {
+		b.Scale = 1
+	}
+	b.base = assets.Manager.GetTexture(b.Type + "Button")
+	b.hover = assets.Manager.GetTexture(b.Type + "ButtonHover")
+	b.pressed = assets.Manager.GetTexture(b.Type + "ButtonPressed")
+	b.RealSize = Area{Width: float32(b.base.Width) * b.Scale, Height: float32(b.base.Height) * b.Scale, X: area.X, Y: area.Y}
 }
 
 func (b *Button) Draw(context *Context) {

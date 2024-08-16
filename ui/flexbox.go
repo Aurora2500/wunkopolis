@@ -7,10 +7,18 @@ const (
 	Col
 )
 
+type FlexAnchor int
+
+const (
+	Start FlexAnchor = iota
+	Center
+)
+
 type Flexbox struct {
 	UIBase
 	Elements []UIElem
 	Dir      FlexDirection
+	Anchor   FlexAnchor
 	Padding  float32
 }
 
@@ -19,13 +27,36 @@ func (fb *Flexbox) Layout(area Area) {
 
 	elemoffset := Vector2{X: area.X, Y: area.Y}
 
+	if fb.Anchor == Center {
+		size := Vector2{}
+		for _, elem := range fb.Elements {
+			size.X += elem.GetSize().Width + fb.Padding
+			size.Y += elem.GetSize().Height + fb.Padding
+		}
+		if fb.Dir == Row {
+			elemoffset.X = elemoffset.X + area.Width/2 - size.X/2
+		} else {
+			elemoffset.Y = elemoffset.Y + area.Height/2 - size.Y/2
+		}
+	}
+
 	for _, elem := range fb.Elements {
-		elem.Layout(Area{
-			Width:  elem.GetSize().Width,
-			Height: elem.GetSize().Height,
-			X:      elemoffset.X,
-			Y:      elemoffset.Y,
-		})
+		if fb.Dir == Row {
+			elem.Layout(Area{
+				Width:  elem.GetSize().Width,
+				Height: area.Height,
+				X:      elemoffset.X,
+				Y:      elemoffset.Y,
+			})
+		} else {
+			elem.Layout(Area{
+				Width:  area.Width,
+				Height: elem.GetSize().Height,
+				X:      elemoffset.X,
+				Y:      elemoffset.Y,
+			})
+		}
+
 		if fb.Dir == Row {
 			elemoffset.X = elemoffset.X + elem.GetSize().Width + fb.Padding
 		} else {

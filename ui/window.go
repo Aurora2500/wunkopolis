@@ -54,11 +54,10 @@ func (w *Window) Setup(bottomBar *Bar) {
 		},
 	}
 	w.button = Button{
-		base:    assets.Manager.GetTexture("Button"),
-		hover:   assets.Manager.GetTexture("ButtonHover"),
-		pressed: assets.Manager.GetTexture("ButtonPressed"),
-		Icon:    assets.Manager.GetTexture("x"), OnClick: func() { w.HideShow() }}
-	bottomBar.AddButton(Button{Icon: w.Icon, OnClick: w.HideShow})
+		Icon:    assets.Manager.GetTexture("x"),
+		OnClick: func() { w.HideShow() },
+	}
+	bottomBar.AddButton(Button{Icon: w.Icon, OnClick: w.HideShow, Scale: 2})
 }
 
 func (w *Window) Update() {
@@ -91,13 +90,13 @@ func (w *Window) Draw(font rl.Font) {
 	}
 	contentArea := Area{
 		X:      w.Area.X + borderSize,
-		Y:      w.Area.Y + topBarSize + topBarOffset,
+		Y:      w.Area.Y + topBarSize + topBarOffset + borderSize,
 		Width:  w.Area.Width - 2*borderSize,
 		Height: w.Area.Height - borderSize - topBarSize - topBarOffset,
 	}
 	w.background.Layout(w.Area)
 	w.Content.Layout(contentArea)
-	w.button.Layout(rl.Rectangle{Width: 48, Height: 43, Y: w.Area.Y + 23, X: w.Area.X + w.Area.Width - 72})
+	w.button.Layout(rl.Rectangle{Y: w.Area.Y + 23, X: w.Area.X + w.Area.Width - 72})
 
 	ctx := Context{}
 	w.background.Draw(&ctx)

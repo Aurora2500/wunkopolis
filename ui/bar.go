@@ -35,11 +35,6 @@ func (b *Bar) Update() {
 }
 
 func (b *Bar) AddButton(button Button) {
-	buttonArea := Area{
-		Width:  96,
-		Height: 86,
-	}
-	button.Layout(buttonArea)
 	b.Content.Elements = append(b.Content.Elements, &button)
 	b.Content.Layout(Area{Width: b.RealSize.Width - 32, Height: b.RealSize.Height - 32, X: b.RealSize.X + 12, Y: b.RealSize.Y + 12})
 }
