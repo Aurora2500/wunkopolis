@@ -16,11 +16,10 @@ const (
 
 type Flexbox struct {
 	UIBase
-	Elements            []UIElem
-	Dir                 FlexDirection
-	Anchor              FlexAnchor
-	Padding             float32
-	VisibilityCondition func() bool
+	Elements []UIElem
+	Dir      FlexDirection
+	Anchor   FlexAnchor
+	Padding  float32
 }
 
 func (fb *Flexbox) Layout(area Area) {
@@ -68,18 +67,14 @@ func (fb *Flexbox) Layout(area Area) {
 }
 
 func (fb *Flexbox) Update() {
-	if fb.VisibilityCondition != nil && !fb.VisibilityCondition() {
-		return
-	}
+
 	for _, elem := range fb.Elements {
 		elem.Update()
 	}
 }
 
 func (fb *Flexbox) Draw(ctx *Context) {
-	if fb.VisibilityCondition != nil && !fb.VisibilityCondition() {
-		return
-	}
+
 	for _, elem := range fb.Elements {
 		elem.Draw(ctx)
 	}

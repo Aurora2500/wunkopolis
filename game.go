@@ -9,8 +9,6 @@ import (
 
 var backgroundColor = rl.Color{R: 0, G: 130, B: 120, A: 255}
 
-var Variables map[string]int
-
 func run_game() {
 	rl.InitWindow(0, 0, "Wunkopolis")
 	defer rl.CloseWindow()
@@ -18,7 +16,6 @@ func run_game() {
 
 	rl.SetTargetFPS(60)
 	rl.ToggleFullscreen()
-	Variables = make(map[string]int)
 	bottomBar := ui.Bar{}
 	assets.Manager.LoadFont("W95FA")
 
@@ -30,6 +27,7 @@ func run_game() {
 			Height: 350,
 		},
 		Content: &ui.Flexbox{
+			Dir: ui.Col,
 			Elements: []ui.UIElem{
 				&ui.Flexbox{
 					Dir: ui.Col,
