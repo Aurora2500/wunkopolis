@@ -57,34 +57,20 @@ func (w *Window) Setup(bottomBar *Bar) {
 		Icon:    assets.Manager.GetTexture("x"),
 		OnClick: func() { w.HideShow() },
 	}
-	bottomBar.AddButton(Button{Icon: w.Icon, OnClick: w.HideShow, Scale: 2})
+	bottomBar.AddButton(Button{Icon: w.Icon, OnClick: w.HideShow, Type: "Big"})
 }
 
 func (w *Window) Update() {
 	if w.hidden {
 		return
 	}
-	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) && rl.CheckCollisionPointRec(rl.GetMousePosition(), w.Area) {
-		w.dragging = true
-		rl.SetMouseCursor(rl.MouseCursorResizeAll)
-		return
-	}
+	w.Content.Update()
+	w.button.Update()
 
-	if w.dragging && rl.IsMouseButtonReleased(rl.MouseButtonLeft) {
-		w.dragging = false
-		rl.SetMouseCursor(rl.MouseCursorArrow)
-		return
-	}
-
-	if w.dragging {
-		delta := rl.GetMouseDelta()
-
-		w.Area.X = w.Area.X + delta.X
-		w.Area.Y = w.Area.Y + delta.Y
-	}
+	w.Dragging()
 }
 
-func (w *Window) Draw(font rl.Font) {
+func (w *Window) Draw() {
 	if w.hidden {
 		return
 	}
@@ -102,11 +88,34 @@ func (w *Window) Draw(font rl.Font) {
 	w.background.Draw(&ctx)
 	w.Content.Draw(&ctx)
 	rl.DrawRectangleRec(w.barArea(), topBarColor)
-	rl.DrawTextEx(font, w.Title, rl.Vector2{X: w.barArea().X + 8, Y: w.barArea().Y + 8}, 40, 0, rl.White)
+	rl.DrawTextEx(assets.Manager.LoadedFont, w.Title, rl.Vector2{X: w.barArea().X + 8, Y: w.barArea().Y + 8}, 40, 0, rl.White)
 	w.button.Draw(&ctx)
-	w.button.Update()
 }
 
 func (w *Window) HideShow() {
 	w.hidden = !w.hidden
+}
+
+func (w *Window) Dragging() {
+	if !rl.CheckCollisionPointRec(rl.GetMousePosition(), w.button.GetSize()) {
+
+		if rl.IsMouseButtonPressed(rl.MouseButtonLeft) && rl.CheckCollisionPointRec(rl.GetMousePosition(), w.barArea()) {
+			w.dragging = true
+			rl.SetMouseCursor(rl.MouseCursorResizeAll)
+			return
+		}
+
+		if w.dragging && rl.IsMouseButtonReleased(rl.MouseButtonLeft) {
+			w.dragging = false
+			rl.SetMouseCursor(rl.MouseCursorArrow)
+			return
+		}
+	}
+
+	if w.dragging {
+		delta := rl.GetMouseDelta()
+
+		w.Area.X = w.Area.X + delta.X
+		w.Area.Y = w.Area.Y + delta.Y
+	}
 }

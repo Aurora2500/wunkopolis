@@ -12,7 +12,7 @@ var Manager AssetManager
 type AssetManager struct {
 	assetDir       string
 	loadedTextures map[string]rl.Texture2D
-	loadedFonts    map[string]rl.Font
+	LoadedFont     rl.Font
 }
 
 func init() {
@@ -25,7 +25,10 @@ func init() {
 
 	Manager.assetDir = assetDir
 	Manager.loadedTextures = make(map[string]rl.Texture2D)
-	Manager.loadedFonts = make(map[string]rl.Font)
+}
+
+func (am *AssetManager) LoadFont(name string) {
+	Manager.LoadedFont = rl.LoadFont(path.Join(am.assetDir, name+".otf"))
 }
 
 func (am *AssetManager) GetTexture(name string) rl.Texture2D {
@@ -40,23 +43,10 @@ func (am *AssetManager) GetTexture(name string) rl.Texture2D {
 	return tex
 }
 
-func (am *AssetManager) GetFont(name string) rl.Font {
-	font, ok := am.loadedFonts[name]
-	if ok {
-		return font
-	}
-
-	fontPath := path.Join(am.assetDir, name+".otf")
-	font = rl.LoadFont(fontPath)
-	am.loadedFonts[name] = font
-	return font
-}
-
 func (am *AssetManager) Unload() {
 	for _, tex := range am.loadedTextures {
 		rl.UnloadTexture(tex)
 	}
-	for _, font := range am.loadedFonts {
-		rl.UnloadFont(font)
-	}
+	rl.UnloadFont(am.LoadedFont)
+
 }

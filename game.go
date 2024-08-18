@@ -9,6 +9,8 @@ import (
 
 var backgroundColor = rl.Color{R: 0, G: 130, B: 120, A: 255}
 
+var Variables map[string]int
+
 func run_game() {
 	rl.InitWindow(0, 0, "Wunkopolis")
 	defer rl.CloseWindow()
@@ -16,8 +18,9 @@ func run_game() {
 
 	rl.SetTargetFPS(60)
 	rl.ToggleFullscreen()
-	font := assets.Manager.GetFont("W95FA")
+	Variables = make(map[string]int)
 	bottomBar := ui.Bar{}
+	assets.Manager.LoadFont("W95FA")
 
 	w1 := ui.Window{
 		Area: ui.Area{
@@ -27,26 +30,36 @@ func run_game() {
 			Height: 350,
 		},
 		Content: &ui.Flexbox{
-			Dir: ui.Col,
 			Elements: []ui.UIElem{
 				&ui.Flexbox{
-					Padding:  4,
-					Elements: []ui.UIElem{&ui.Button{Type: "Long"}, &ui.Button{Type: "Long"}, &ui.Button{Type: "Long"}},
-					Anchor:   ui.Center},
-			}},
+					Dir: ui.Col,
+					Elements: []ui.UIElem{
+						&ui.Flexbox{
+							Padding: 4,
+							Elements: []ui.UIElem{
+								&ui.Button{Type: "Long", Text: "Test one"},
+								&ui.Button{Type: "Long", Text: "Test two"},
+								&ui.Button{Type: "Long", Text: "Test three"},
+							},
+							Anchor: ui.Center},
+					},
+				},
+			},
+		},
 		Icon:  assets.Manager.GetTexture("Statistics"),
 		Title: "Statistics",
 	}
 	bottomBar.Setup()
 	w1.Setup(&bottomBar)
 	for !rl.WindowShouldClose() {
-		w1.Update()
+
 		rl.BeginDrawing()
 
 		rl.ClearBackground(backgroundColor)
 		bottomBar.Draw()
 		bottomBar.Update()
-		w1.Draw(font)
+		w1.Draw()
+		w1.Update()
 
 		rl.EndDrawing()
 	}
