@@ -2,6 +2,7 @@ package main
 
 import (
 	"wunkopolis/assets"
+	"wunkopolis/lua"
 	"wunkopolis/ui"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -19,34 +20,11 @@ func run_game() {
 	bottomBar := ui.Bar{}
 	assets.Manager.LoadFont("W95FA")
 
-	w1 := ui.Window{
-		Area: ui.Area{
-			X:      0,
-			Y:      0,
-			Width:  632,
-			Height: 350,
-		},
-		Content: &ui.Flexbox{
-			Dir: ui.Col,
-			Elements: []ui.UIElem{
-				&ui.Flexbox{
-					Dir: ui.Col,
-					Elements: []ui.UIElem{
-						&ui.Flexbox{
-							Padding: 4,
-							Elements: []ui.UIElem{
-								&ui.Button{Type: "Long", Text: "Test one"},
-								&ui.Button{Type: "Long", Text: "Test two"},
-								&ui.Button{Type: "Long", Text: "Test three"},
-							},
-							Anchor: ui.Center},
-					},
-				},
-			},
-		},
-		Icon:  assets.Manager.GetTexture("Statistics"),
-		Title: "Statistics",
+	w1 := ui.Window{}
+	if window, err := lua.GetWindow("StatisticsWindow"); err == nil {
+		w1 = window
 	}
+
 	bottomBar.Setup()
 	w1.Setup(&bottomBar)
 	for !rl.WindowShouldClose() {
@@ -54,10 +32,10 @@ func run_game() {
 		rl.BeginDrawing()
 
 		rl.ClearBackground(backgroundColor)
-		bottomBar.Draw()
-		bottomBar.Update()
 		w1.Draw()
 		w1.Update()
+		bottomBar.Draw()
+		bottomBar.Update()
 
 		rl.EndDrawing()
 	}

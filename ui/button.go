@@ -8,10 +8,9 @@ import (
 
 type Button struct {
 	UIBase
-	base       rl.Texture2D
-	hover      rl.Texture2D
-	pressed    rl.Texture2D
-	Type       string
+	Base       rl.Texture2D
+	Hover      rl.Texture2D
+	Pressed    rl.Texture2D
 	Icon       rl.Texture2D
 	Text       string
 	FontSize   float32
@@ -20,28 +19,18 @@ type Button struct {
 }
 
 func (b *Button) Layout(area Area) {
-
-	if b.FontSize == 0 {
-		b.FontSize = 24
-	}
-	if b.TextOffset == 0 {
-		b.TextOffset = 10
-	}
-	b.base = assets.Manager.GetTexture(b.Type + "Button")
-	b.hover = assets.Manager.GetTexture(b.Type + "ButtonHover")
-	b.pressed = assets.Manager.GetTexture(b.Type + "ButtonPressed")
-	b.RealSize = Area{Width: float32(b.base.Width), Height: float32(b.base.Height), X: area.X, Y: area.Y}
+	b.RealSize = Area{Width: float32(b.Base.Width), Height: float32(b.Base.Height), X: area.X, Y: area.Y}
 }
 
 func (b *Button) Draw(context *Context) {
-	texture := b.base
+	texture := b.Base
 	textureRect := Area{X: 0, Y: 0, Width: float32(texture.Width), Height: float32(texture.Height)}
 	iconRect := Area{X: 0, Y: 0, Width: float32(b.Icon.Width), Height: float32(b.Icon.Height)}
 	if rl.CheckCollisionPointRec(rl.GetMousePosition(), b.RealSize) {
 		if rl.IsMouseButtonDown(0) {
-			texture = b.pressed
+			texture = b.Pressed
 		} else {
-			texture = b.hover
+			texture = b.Hover
 		}
 	}
 	rl.DrawTexturePro(texture, textureRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
