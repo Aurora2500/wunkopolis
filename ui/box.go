@@ -7,7 +7,7 @@ type Box struct {
 	Col rl.Color
 }
 
-func (b *Box) Layout(area rl.Rectangle) {
+func (b *Box) Layout(area Area) {
 	b.RealSize = area
 }
 

@@ -83,3 +83,7 @@ func (fb *Flexbox) Draw(ctx *Context) {
 func (fb *Flexbox) GetSize() Area {
 	return fb.RealSize
 }
+
+func (fb *Flexbox) Add(elem UIElem) {
+	fb.Elements = append(fb.Elements, elem)
+}

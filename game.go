@@ -11,12 +11,12 @@ import (
 var backgroundColor = rl.Color{R: 0, G: 130, B: 120, A: 255}
 
 func run_game() {
-	rl.InitWindow(0, 0, "Wunkopolis")
+	rl.InitWindow(int32(rl.GetScreenWidth()), int32(rl.GetScreenHeight()), "Wunkopolis")
 	defer rl.CloseWindow()
 	defer assets.Manager.Unload()
+	rl.ToggleFullscreen()
 
 	rl.SetTargetFPS(60)
-	rl.ToggleFullscreen()
 	bottomBar := ui.Bar{}
 	assets.Manager.LoadFont("W95FA")
 

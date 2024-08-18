@@ -5,6 +5,7 @@ import (
 	"wunkopolis/assets"
 	"wunkopolis/ui"
 
+	rl "github.com/gen2brain/raylib-go/raylib"
 	lua "github.com/yuin/gopher-lua"
 )
 
@@ -15,12 +16,11 @@ var L *lua.LState
 func init() {
 	L = lua.NewState()
 	defer L.Close()
+	L.DoFile("lua/main.lua")
 
 	Variables = make(map[string]int)
 
 	L.SetGlobal("SetVariable", L.NewFunction(setVaribleLua))
-
-	L.DoFile("lua/main.lua")
 
 }
 
@@ -40,13 +40,13 @@ func toWindow(table *lua.LTable, name string) (ui.Window, error) {
 		return window, errors.New("Could not find title for " + name)
 	}
 
-	width := float32(0)
+	width := float32(10)
 	if num, ok := table.RawGetString("width").(lua.LNumber); ok {
 		width = float32(num)
 	} else {
 		return window, errors.New("Could not find width for " + name)
 	}
-	height := float32(0)
+	height := float32(10)
 	if num, ok := table.RawGetString("height").(lua.LNumber); ok {
 		height = float32(num)
 	} else {
@@ -147,6 +147,44 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 				Text:       buttonText,
 			}, nil
 		}
+	case "Box":
+		{
+			red := 0
+			if r, ok := table.RawGetString("r").(lua.LNumber); ok {
+				red = int(r)
+			}
+			green := 0
+			if g, ok := table.RawGetString("g").(lua.LNumber); ok {
+				green = int(g)
+			}
+			blue := 0
+			if b, ok := table.RawGetString("b").(lua.LNumber); ok {
+				blue = int(b)
+			}
+
+			col := rl.NewColor(uint8(red), uint8(green), uint8(blue), 255)
+			return &ui.Box{Col: col}, nil
+		}
+	case "Tabs":
+		{
+			elements := []ui.UIElem{}
+			if elems, ok := table.RawGetString("elements").(*lua.LTable); ok {
+				for i := 1; i <= elems.Len(); i++ {
+					if elem, ok := elems.RawGetInt(i).(*lua.LTable); ok {
+						if uielem, err := toUIElem(elem); err == nil {
+							elements = append(elements, uielem)
+						}
+					}
+				}
+			}
+			tabs := ui.Tabs{
+				Tabs:       elements,
+				TabButtons: ui.Flexbox{Anchor: ui.Center},
+			}
+			tabs.Setup()
+			return &tabs, nil
+		}
+
 	}
 
 	return &ui.Box{}, errors.New("ui elemnt not found")
