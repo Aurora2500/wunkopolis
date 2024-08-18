@@ -54,6 +54,9 @@ func (w *Window) Setup(bottomBar *Bar) {
 		},
 	}
 	w.button = Button{
+		Base:    assets.Manager.GetTexture("Button"),
+		Hover:   assets.Manager.GetTexture("ButtonHover"),
+		Pressed: assets.Manager.GetTexture("ButtonPressed"),
 		Icon:    assets.Manager.GetTexture("x"),
 		OnClick: func() { w.HideShow() },
 	}

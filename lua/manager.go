@@ -177,12 +177,59 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 					}
 				}
 			}
+			border := 10
+			if bor, ok := table.RawGetString("borderSize").(lua.LNumber); ok {
+				border = int(bor)
+			}
+			background := ui.NPatchBox{}
+			if text, ok := table.RawGetString("background").(lua.LString); ok {
+				texture := assets.Manager.GetTexture(string(text))
+				background = ui.NPatchBox{
+					Texture: texture, NPatchInfo: rl.NPatchInfo{
+						Source: ui.Area{
+							X:      0,
+							Y:      0,
+							Width:  float32(texture.Width),
+							Height: float32(texture.Height),
+						},
+						Left:   int32(border),
+						Right:  int32(border),
+						Top:    int32(border),
+						Bottom: int32(border),
+					},
+				}
+			}
 			tabs := ui.Tabs{
 				Tabs:       elements,
 				TabButtons: ui.Flexbox{Anchor: ui.Center},
+				Background: background,
 			}
 			tabs.Setup()
 			return &tabs, nil
+		}
+	case "NPatchRect":
+		{
+			textureName := ""
+			if tex, ok := table.RawGetString("texture").(lua.LString); ok {
+				textureName = string(tex)
+			}
+			border := 10
+			if bor, ok := table.RawGetString("borderSize").(lua.LNumber); ok {
+				border = int(bor)
+			}
+			texture := assets.Manager.GetTexture(textureName)
+			return &ui.NPatchBox{Texture: texture, NPatchInfo: rl.NPatchInfo{
+				Source: ui.Area{
+					X:      0,
+					Y:      0,
+					Width:  float32(texture.Width),
+					Height: float32(texture.Height),
+				},
+				Left:   int32(border),
+				Right:  int32(border),
+				Top:    int32(border),
+				Bottom: int32(border),
+			}}, nil
 		}
 
 	}

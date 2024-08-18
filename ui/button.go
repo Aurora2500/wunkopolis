@@ -11,11 +11,13 @@ type Button struct {
 	Base       rl.Texture2D
 	Hover      rl.Texture2D
 	Pressed    rl.Texture2D
+	Toggle     rl.Texture2D
 	Icon       rl.Texture2D
 	Text       string
 	FontSize   float32
 	TextOffset float32
 	OnClick    func()
+	Toggled    bool
 }
 
 func (b *Button) Layout(area Area) {
@@ -32,6 +34,9 @@ func (b *Button) Draw(context *Context) {
 		} else {
 			texture = b.Hover
 		}
+	}
+	if b.Toggled {
+		texture = b.Toggle
 	}
 	rl.DrawTexturePro(texture, textureRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
 	rl.DrawTexturePro(b.Icon, iconRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
