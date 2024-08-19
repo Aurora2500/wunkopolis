@@ -5,6 +5,7 @@ StatisticsWindow = {
         ["icon"]     = "Statistics",
         ["content"] = {
             ["type"] = "Tabs",
+            ["names"] = {"window1","window2","window3"},
             ["background"] = "InteriorPanel",
             ["elements"] = {
                 {["type"] = "Flexbox",},

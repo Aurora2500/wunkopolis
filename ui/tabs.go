@@ -8,6 +8,7 @@ type Tabs struct {
 	UIBase
 	Index      int
 	Tabs       []UIElem
+	TabNames   []string
 	TabButtons Flexbox
 	Background NPatchBox
 }
@@ -57,11 +58,14 @@ func (t *Tabs) Setup() {
 			toggled = true
 		}
 		t.TabButtons.Add(&Button{
-			Toggled: toggled,
-			Base:    assets.Manager.GetTexture("LongButton"),
-			Hover:   assets.Manager.GetTexture("LongButtonHover"),
-			Pressed: assets.Manager.GetTexture("LongButtonPressed"),
-			Toggle:  assets.Manager.GetTexture("LongButtonToggled"),
+			Toggled:    toggled,
+			Base:       assets.Manager.GetTexture("LongButton"),
+			Hover:      assets.Manager.GetTexture("LongButtonHover"),
+			Pressed:    assets.Manager.GetTexture("LongButtonPressed"),
+			Toggle:     assets.Manager.GetTexture("LongButtonToggled"),
+			Text:       t.TabNames[i],
+			FontSize:   16,
+			TextOffset: 12,
 			OnClick: func() {
 				t.Index = i
 				for bi, elem := range t.TabButtons.Elements {

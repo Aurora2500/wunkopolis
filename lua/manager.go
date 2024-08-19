@@ -120,7 +120,7 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 			if fsize, ok := table.RawGetString("fontSize").(lua.LNumber); ok {
 				fontSize = float32(fsize)
 			}
-			textOffset := float32(12)
+			textOffset := float32(16)
 			if tffset, ok := table.RawGetString("textOffset").(lua.LNumber); ok {
 				textOffset = float32(tffset)
 			}
@@ -177,6 +177,17 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 					}
 				}
 			}
+			tabNames := []string{}
+			if elems, ok := table.RawGetString("names").(*lua.LTable); ok {
+				for i := 1; i <= elems.Len(); i++ {
+					if elem, ok := elems.RawGetInt(i).(lua.LString); ok {
+						tabNames = append(tabNames, string(elem))
+					}
+				}
+			}
+			for i := len(tabNames) - 1; i < len(elements); i++ {
+				tabNames = append(tabNames, "")
+			}
 			border := 10
 			if bor, ok := table.RawGetString("borderSize").(lua.LNumber); ok {
 				border = int(bor)
@@ -201,8 +212,9 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 			}
 			tabs := ui.Tabs{
 				Tabs:       elements,
-				TabButtons: ui.Flexbox{Anchor: ui.Center},
+				TabButtons: ui.Flexbox{Anchor: ui.Center, Padding: 8},
 				Background: background,
+				TabNames:   tabNames,
 			}
 			tabs.Setup()
 			return &tabs, nil
