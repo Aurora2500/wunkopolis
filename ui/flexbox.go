@@ -117,21 +117,15 @@ func (sb *Scrollbox) LayoutInside() {
 		elemoffset.Y += sb.ScrollPosition
 	}
 	for _, elem := range sb.Elements {
+		elem.Layout(Area{
+			Width:  elem.GetSize().Width,
+			Height: elem.GetSize().Height,
+			X:      elemoffset.X,
+			Y:      elemoffset.Y,
+		})
 		if sb.Direction == Row {
-			elem.Layout(Area{
-				Width:  elem.GetSize().Width,
-				Height: elem.GetSize().Height,
-				X:      elemoffset.X,
-				Y:      elemoffset.Y,
-			})
 			elemoffset.X = elemoffset.X + elem.GetSize().Width + sb.Padding
 		} else {
-			elem.Layout(Area{
-				Width:  elem.GetSize().Width,
-				Height: elem.GetSize().Height,
-				X:      elemoffset.X,
-				Y:      elemoffset.Y,
-			})
 			elemoffset.Y = elemoffset.Y + elem.GetSize().Height + sb.Padding
 		}
 	}
@@ -143,18 +137,25 @@ func (sb *Scrollbox) LayoutInside() {
 }
 
 func (sb *Scrollbox) Update() {
-	if rl.CheckCollisionPointRec(rl.GetMousePosition(), sb.RealSize) {
-		changed := sb.ScrollPosition + rl.GetMouseWheelMove()*24
-		if changed > 0 {
-			changed = 0
-		}
-		if changed < sb.ScrollSize {
-			changed = sb.ScrollSize
-		}
-		if changed != sb.ScrollPosition {
-			sb.ScrollPosition = changed
-			sb.LayoutInside()
-		}
+	// if rl.CheckCollisionPointRec(rl.GetMousePosition(), sb.RealSize) {
+	// 	changed := sb.ScrollPosition + rl.GetMouseWheelMove()*24
+	// 	if changed > 0 {
+	// 		changed = 0
+	// 	}
+	// 	if changed < sb.ScrollSize {
+	// 		changed = sb.ScrollSize
+	// 	}
+	// 	if changed != sb.ScrollPosition {
+	// 		sb.ScrollPosition = changed
+	// 		sb.LayoutInside()
+	// 	}
+	// }
+
+	dscroll := rl.GetMouseWheelMove()
+	if dscroll != 0. {
+		sb.ScrollPosition = rl.Clamp(sb.ScrollPosition+dscroll*24, sb.ScrollSize, 0)
+		// sb.LayoutInside()
+		println(sb.ScrollPosition, dscroll)
 	}
 
 	for _, elem := range sb.Elements {

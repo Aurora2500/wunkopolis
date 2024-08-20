@@ -30,14 +30,14 @@ func run_game() {
 	bottomBar.Setup()
 	w1.Setup(&bottomBar)
 	for !rl.WindowShouldClose() {
+		w1.Update()
+		bottomBar.Update()
 
 		rl.BeginDrawing()
 
 		rl.ClearBackground(backgroundColor)
 		w1.Draw()
-		w1.Update()
 		bottomBar.Draw()
-		bottomBar.Update()
 
 		rl.EndDrawing()
 	}
