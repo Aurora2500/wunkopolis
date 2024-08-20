@@ -24,6 +24,7 @@ type Flexbox struct {
 	Direction FlexDirection
 	Anchor    FlexAnchor
 	Padding   float32
+	Border    float32
 }
 
 func (fb *Flexbox) Layout(area Area) {
@@ -33,7 +34,7 @@ func (fb *Flexbox) Layout(area Area) {
 
 func (fb *Flexbox) LayoutInside() {
 	area := fb.RealSize
-	elemoffset := Vector2{X: area.X, Y: area.Y}
+	elemoffset := Vector2{X: area.X + fb.Border, Y: area.Y + fb.Border}
 
 	if fb.Anchor == Center {
 		size := Vector2{}
@@ -99,22 +100,24 @@ type Scrollbox struct {
 	Padding        float32
 	ScrollPosition float32
 	ScrollSize     float32
+	Border         float32
 }
 
 func (sb *Scrollbox) Layout(area Area) {
 	sb.RealSize = area
+	sb.UpdateSize()
 	sb.LayoutInside()
 }
 
 func (sb *Scrollbox) LayoutInside() {
 	elemoffset := Vector2{
-		X: sb.RealSize.X + sb.Padding,
-		Y: sb.RealSize.Y + sb.Padding,
+		X: sb.RealSize.X + sb.Border,
+		Y: sb.RealSize.Y + sb.Border,
 	}
 	if sb.Direction == Row {
-		elemoffset.X += sb.ScrollPosition
+		elemoffset.X -= sb.ScrollPosition
 	} else {
-		elemoffset.Y += sb.ScrollPosition
+		elemoffset.Y -= sb.ScrollPosition
 	}
 	for _, elem := range sb.Elements {
 		elem.Layout(Area{
@@ -129,33 +132,14 @@ func (sb *Scrollbox) LayoutInside() {
 			elemoffset.Y = elemoffset.Y + elem.GetSize().Height + sb.Padding
 		}
 	}
-	if sb.Direction == Row {
-		sb.ScrollSize = -(elemoffset.X - sb.RealSize.X)
-	} else {
-		sb.ScrollSize = -(elemoffset.Y - sb.RealSize.Y)
-	}
 }
 
 func (sb *Scrollbox) Update() {
-	// if rl.CheckCollisionPointRec(rl.GetMousePosition(), sb.RealSize) {
-	// 	changed := sb.ScrollPosition + rl.GetMouseWheelMove()*24
-	// 	if changed > 0 {
-	// 		changed = 0
-	// 	}
-	// 	if changed < sb.ScrollSize {
-	// 		changed = sb.ScrollSize
-	// 	}
-	// 	if changed != sb.ScrollPosition {
-	// 		sb.ScrollPosition = changed
-	// 		sb.LayoutInside()
-	// 	}
-	// }
 
 	dscroll := rl.GetMouseWheelMove()
 	if dscroll != 0. {
-		sb.ScrollPosition = rl.Clamp(sb.ScrollPosition+dscroll*24, sb.ScrollSize, 0)
-		// sb.LayoutInside()
-		println(sb.ScrollPosition, dscroll)
+		sb.ScrollPosition = rl.Clamp(sb.ScrollPosition-dscroll*24, 0, sb.ScrollSize)
+		sb.LayoutInside()
 	}
 
 	for _, elem := range sb.Elements {
@@ -164,7 +148,7 @@ func (sb *Scrollbox) Update() {
 }
 
 func (sb *Scrollbox) Draw(ctx *Context) {
-	ctx.PushScissor(InsetArea(sb.RealSize, sb.Padding))
+	ctx.PushScissor(InsetArea(sb.RealSize, sb.Border))
 	for _, elem := range sb.Elements {
 		elem.Draw(ctx)
 	}
@@ -177,4 +161,24 @@ func (sb *Scrollbox) GetSize() Area {
 
 func (sb *Scrollbox) Add(elem UIElem) {
 	sb.Elements = append(sb.Elements, elem)
+	sb.UpdateSize()
+}
+
+func (sb *Scrollbox) UpdateSize() {
+	scrollSize := float32(0)
+
+	if sb.Direction == Row {
+		scrollSize = scrollSize - InsetArea(sb.RealSize, sb.Border).Width - sb.Padding
+	} else {
+		scrollSize = scrollSize - InsetArea(sb.RealSize, sb.Border).Height - sb.Padding
+
+	}
+	for _, elem := range sb.Elements {
+		if sb.Direction == Row {
+			scrollSize = scrollSize + elem.GetSize().Width + sb.Padding
+		} else {
+			scrollSize = scrollSize + elem.GetSize().Height + sb.Padding
+		}
+	}
+	sb.ScrollSize = scrollSize
 }

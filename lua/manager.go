@@ -90,6 +90,10 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 	switch elementType {
 	case "Flexbox":
 		{
+			border := 10
+			if bor, ok := table.RawGetString("border").(lua.LNumber); ok {
+				border = int(bor)
+			}
 			direction := 0
 			if dir, ok := table.RawGetString("direction").(lua.LNumber); ok {
 				direction = int(dir)
@@ -112,10 +116,14 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 					}
 				}
 			}
-			return &ui.Flexbox{Direction: ui.FlexDirection(direction), Anchor: ui.FlexAnchor(anchor), Padding: padding, Elements: elements}, nil
+			return &ui.Flexbox{Direction: ui.FlexDirection(direction), Anchor: ui.FlexAnchor(anchor), Padding: padding, Elements: elements, Border: float32(border)}, nil
 		}
 	case "Scrollbox":
 		{
+			border := 10
+			if bor, ok := table.RawGetString("border").(lua.LNumber); ok {
+				border = int(bor)
+			}
 			direction := 0
 			if dir, ok := table.RawGetString("direction").(lua.LNumber); ok {
 				direction = int(dir)
@@ -134,7 +142,7 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 					}
 				}
 			}
-			return &ui.Scrollbox{Direction: ui.FlexDirection(direction), Padding: padding, Elements: elements}, nil
+			return &ui.Scrollbox{Direction: ui.FlexDirection(direction), Padding: padding, Elements: elements, Border: float32(border)}, nil
 		}
 	case "Button":
 		{

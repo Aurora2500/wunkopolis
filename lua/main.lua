@@ -8,7 +8,7 @@ StatisticsWindow = {
             ["names"] = {"Scrollbox test","Flexbox one","Flexbox two"},
             ["background"] = "InteriorPanel",
             ["elements"] = {
-                {["type"] = "Scrollbox",["padding"] = 10,["direction"] = 1, ["elements"] = 
+                {["type"] = "Scrollbox",["padding"] = 10,["direction"] = 1,["border"] = 10, ["elements"] = 
                     {
                         {["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"}
                     }
