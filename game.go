@@ -27,17 +27,6 @@ func run_game() {
 		w1 = window
 	}
 
-	t := ui.Text{
-		Font:    assets.Manager.LoadedFont,
-		Content: lorem_ipsum,
-	}
-
-	t.Layout(ui.Area{
-		X: 1000, Y: 600,
-		Width:  400,
-		Height: 800,
-	})
-
 	bottomBar.Setup()
 	w1.Setup(&bottomBar)
 	for !rl.WindowShouldClose() {
@@ -49,8 +38,6 @@ func run_game() {
 		w1.Update()
 		bottomBar.Draw()
 		bottomBar.Update()
-
-		t.Draw(&ui.Context{})
 
 		rl.EndDrawing()
 	}

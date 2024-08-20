@@ -8,16 +8,15 @@ import (
 
 type Button struct {
 	UIBase
-	Base       rl.Texture2D
-	Hover      rl.Texture2D
-	Pressed    rl.Texture2D
-	Toggle     rl.Texture2D
-	Icon       rl.Texture2D
-	Text       string
-	FontSize   float32
-	TextOffset float32
-	OnClick    func()
-	Toggled    bool
+	Base     rl.Texture2D
+	Hover    rl.Texture2D
+	Pressed  rl.Texture2D
+	Toggle   rl.Texture2D
+	Icon     rl.Texture2D
+	Text     string
+	FontSize float32
+	OnClick  func()
+	Toggled  bool
 }
 
 func (b *Button) Layout(area Area) {
@@ -41,7 +40,8 @@ func (b *Button) Draw(context *Context) {
 	rl.DrawTexturePro(texture, textureRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
 	rl.DrawTexturePro(b.Icon, iconRect, b.RealSize, rl.Vector2Zero(), 0, rl.White)
 	if b.Text != "" {
-		rl.DrawTextEx(assets.Manager.LoadedFont, b.Text, rl.Vector2{X: b.RealSize.X + b.TextOffset, Y: b.RealSize.Y + b.TextOffset}, b.FontSize, 0, rl.Black)
+		textSize := rl.MeasureTextEx(assets.Manager.LoadedFont, b.Text, b.FontSize, 0)
+		rl.DrawTextEx(assets.Manager.LoadedFont, b.Text, rl.Vector2{X: b.RealSize.X + (b.RealSize.Width-textSize.X)/2, Y: b.RealSize.Y + (b.RealSize.Height-textSize.Y)/2}, b.FontSize, 0, rl.Black)
 	}
 }
 

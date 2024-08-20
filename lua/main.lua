@@ -5,10 +5,14 @@ StatisticsWindow = {
         ["icon"]     = "Statistics",
         ["content"] = {
             ["type"] = "Tabs",
-            ["names"] = {"window1","window2","window3"},
+            ["names"] = {"Scrollbox test","Flexbox one","Flexbox two"},
             ["background"] = "InteriorPanel",
             ["elements"] = {
-                {["type"] = "Flexbox",},
+                {["type"] = "Scrollbox",["padding"] = 10,["direction"] = 1, ["elements"] = 
+                    {
+                        {["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"},{["type"] = "Button",["buttonType"] = "Big"}
+                    }
+                },
                 {["type"] = "Flexbox",},
                 {["type"] = "Flexbox",}
                 }

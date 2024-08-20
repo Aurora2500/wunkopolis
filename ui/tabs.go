@@ -11,6 +11,7 @@ type Tabs struct {
 	TabNames   []string
 	TabButtons Flexbox
 	Background NPatchBox
+	FontSize   float32
 }
 
 func (t *Tabs) Layout(area Area) {
@@ -49,6 +50,9 @@ func (t *Tabs) Draw(ctx *Context) {
 
 func (t *Tabs) Update() {
 	t.TabButtons.Update()
+	for _, elem := range t.Tabs {
+		elem.Update()
+	}
 }
 
 func (t *Tabs) Setup() {
@@ -58,14 +62,13 @@ func (t *Tabs) Setup() {
 			toggled = true
 		}
 		t.TabButtons.Add(&Button{
-			Toggled:    toggled,
-			Base:       assets.Manager.GetTexture("LongButton"),
-			Hover:      assets.Manager.GetTexture("LongButtonHover"),
-			Pressed:    assets.Manager.GetTexture("LongButtonPressed"),
-			Toggle:     assets.Manager.GetTexture("LongButtonToggled"),
-			Text:       t.TabNames[i],
-			FontSize:   16,
-			TextOffset: 12,
+			Toggled:  toggled,
+			Base:     assets.Manager.GetTexture("LongButton"),
+			Hover:    assets.Manager.GetTexture("LongButtonHover"),
+			Pressed:  assets.Manager.GetTexture("LongButtonPressed"),
+			Toggle:   assets.Manager.GetTexture("LongButtonToggled"),
+			Text:     t.TabNames[i],
+			FontSize: t.FontSize,
 			OnClick: func() {
 				t.Index = i
 				for bi, elem := range t.TabButtons.Elements {

@@ -112,17 +112,35 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 					}
 				}
 			}
-			return &ui.Flexbox{Dir: ui.FlexDirection(direction), Anchor: ui.FlexAnchor(anchor), Padding: padding, Elements: elements}, nil
+			return &ui.Flexbox{Direction: ui.FlexDirection(direction), Anchor: ui.FlexAnchor(anchor), Padding: padding, Elements: elements}, nil
+		}
+	case "Scrollbox":
+		{
+			direction := 0
+			if dir, ok := table.RawGetString("direction").(lua.LNumber); ok {
+				direction = int(dir)
+			}
+			padding := float32(0)
+			if pad, ok := table.RawGetString("padding").(lua.LNumber); ok {
+				padding = float32(pad)
+			}
+			elements := []ui.UIElem{}
+			if elems, ok := table.RawGetString("elements").(*lua.LTable); ok {
+				for i := 1; i <= elems.Len(); i++ {
+					if elem, ok := elems.RawGetInt(i).(*lua.LTable); ok {
+						if uielem, err := toUIElem(elem); err == nil {
+							elements = append(elements, uielem)
+						}
+					}
+				}
+			}
+			return &ui.Scrollbox{Direction: ui.FlexDirection(direction), Padding: padding, Elements: elements}, nil
 		}
 	case "Button":
 		{
 			fontSize := float32(20)
 			if fsize, ok := table.RawGetString("fontSize").(lua.LNumber); ok {
 				fontSize = float32(fsize)
-			}
-			textOffset := float32(16)
-			if tffset, ok := table.RawGetString("textOffset").(lua.LNumber); ok {
-				textOffset = float32(tffset)
 			}
 			buttonType := ""
 			if btype, ok := table.RawGetString("buttonType").(lua.LString); ok {
@@ -138,13 +156,12 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 			}
 
 			return &ui.Button{
-				FontSize:   fontSize,
-				TextOffset: textOffset,
-				Base:       assets.Manager.GetTexture(buttonType + "Button"),
-				Hover:      assets.Manager.GetTexture(buttonType + "ButtonHover"),
-				Pressed:    assets.Manager.GetTexture(buttonType + "ButtonPressed"),
-				Icon:       assets.Manager.GetTexture(buttonIcon),
-				Text:       buttonText,
+				FontSize: fontSize,
+				Base:     assets.Manager.GetTexture(buttonType + "Button"),
+				Hover:    assets.Manager.GetTexture(buttonType + "ButtonHover"),
+				Pressed:  assets.Manager.GetTexture(buttonType + "ButtonPressed"),
+				Icon:     assets.Manager.GetTexture(buttonIcon),
+				Text:     buttonText,
 			}, nil
 		}
 	case "Box":
@@ -210,11 +227,16 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 					},
 				}
 			}
+			fontSize := 16
+			if fsize, ok := table.RawGetString("fontSize").(lua.LNumber); ok {
+				fontSize = int(fsize)
+			}
 			tabs := ui.Tabs{
 				Tabs:       elements,
 				TabButtons: ui.Flexbox{Anchor: ui.Center, Padding: 8},
 				Background: background,
 				TabNames:   tabNames,
+				FontSize:   float32(fontSize),
 			}
 			tabs.Setup()
 			return &tabs, nil
