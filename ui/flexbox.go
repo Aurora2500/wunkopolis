@@ -163,11 +163,11 @@ func (sb *Scrollbox) Update() {
 }
 
 func (sb *Scrollbox) Draw(ctx *Context) {
-	rl.BeginScissorMode(sb.RealSize.ToInt32().X+int32(sb.Padding), sb.RealSize.ToInt32().Y+int32(sb.Padding), sb.RealSize.ToInt32().Width-2*int32(sb.Padding), sb.RealSize.ToInt32().Height-2*int32(sb.Padding))
+	ctx.PushScissor(InsetArea(sb.RealSize, sb.Padding))
 	for _, elem := range sb.Elements {
 		elem.Draw(ctx)
 	}
-	rl.EndScissorMode()
+	ctx.PopScissor()
 }
 
 func (sb *Scrollbox) GetSize() Area {
