@@ -105,5 +105,13 @@ func (t *Text) FormatString() string {
 		id, after, _ := strings.Cut(result, "]")
 		resultString = strings.Join([]string{before, fmt.Sprint(variables.Variables[id]), after}, "")
 	}
+	for strings.Contains(resultString, "|") {
+		before, result, _ := strings.Cut(resultString, "|")
+		for strings.Contains(resultString, "|") {
+			id, after, _ := strings.Cut(result, "|")
+			resultString = strings.Join([]string{before, fmt.Sprint(variables.Variables[id]), after}, "")
+		}
+	}
+
 	return resultString
 }

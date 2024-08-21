@@ -73,6 +73,19 @@ func (w *Window) Update() {
 	w.Dragging()
 }
 
+func (w *Window) Layout() {
+	contentArea := Area{
+		X:      w.Area.X + borderSize,
+		Y:      w.Area.Y + topBarSize + topBarOffset + borderSize,
+		Width:  w.Area.Width - 2*borderSize,
+		Height: w.Area.Height - 2*borderSize - topBarSize - topBarOffset,
+	}
+	w.background.Layout(w.Area)
+	w.Content.Layout(contentArea)
+	w.button.Layout(rl.Rectangle{Y: w.Area.Y + 23, X: w.Area.X + w.Area.Width - 72})
+
+}
+
 func (w *Window) Draw() {
 	if w.hidden {
 		return
@@ -117,7 +130,7 @@ func (w *Window) Dragging() {
 
 	if w.dragging {
 		delta := rl.GetMouseDelta()
-
+		w.Layout()
 		w.Area.X = w.Area.X + delta.X
 		w.Area.Y = w.Area.Y + delta.Y
 	}
