@@ -2,6 +2,7 @@ package main
 
 import (
 	"wunkopolis/assets"
+	"wunkopolis/maps"
 	"wunkopolis/ui"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -20,6 +21,9 @@ func run_game() {
 	rl.SetTargetFPS(60)
 	bottomBar := ui.Bar{}
 	assets.Manager.LoadFont("W95FA")
+
+	maps := maps.Map{}
+	maps.Create(rl.Rectangle{Width: 200, Height: 200})
 
 	windows := []ui.Window{{
 		Content: &ui.Flexbox{
@@ -41,10 +45,22 @@ func run_game() {
 		Icon:  assets.Manager.GetTexture("Statistics"),
 	},
 		{
-			Content: &ui.Scrollbox{},
-			Title:   "Map",
-			Area:    rl.Rectangle{Width: 1000, Height: 800},
-			Icon:    assets.Manager.GetTexture("Map"),
+			Content: &ui.MapBox{
+				Background: ui.NPatchBox{
+					Texture: assets.Manager.GetTexture("InteriorPanel"),
+					NPatchInfo: rl.NPatchInfo{
+						Source: rl.Rectangle{Width: float32(assets.Manager.GetTexture("InteriorPanel").Width), Height: float32(assets.Manager.GetTexture("InteriorPanel").Height)},
+						Left:   10,
+						Right:  10,
+						Top:    10,
+						Bottom: 10,
+					},
+				},
+				Map: &maps,
+			},
+			Title: "Map",
+			Area:  rl.Rectangle{Width: 1000, Height: 800},
+			Icon:  assets.Manager.GetTexture("Map"),
 		},
 	}
 

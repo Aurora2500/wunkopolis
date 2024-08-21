@@ -194,3 +194,27 @@ func (sb *Scrollbox) UpdateSize() {
 	}
 	sb.ScrollSize = scrollSize
 }
+
+type MapBox struct {
+	UIBase
+	Map        Maper
+	Background NPatchBox
+}
+
+func (sb *MapBox) Layout(area Area) {
+	sb.RealSize = area
+	sb.Background.Layout(area)
+}
+
+func (sb *MapBox) Draw(ctx *Context) {
+	sb.Background.Draw(ctx)
+	sb.Map.DrawMap(sb.RealSize)
+}
+
+func (sb *MapBox) GetSize() Area {
+	return sb.RealSize
+}
+
+func (sb *MapBox) Update() {
+
+}

@@ -16,3 +16,7 @@ type UIBase struct {
 	RealSize      Area
 	PrefferedSize Area
 }
+
+type Maper interface {
+	DrawMap(offset Area)
+}
