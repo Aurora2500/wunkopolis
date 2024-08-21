@@ -23,7 +23,7 @@ type Window struct {
 	Icon       rl.Texture2D
 	Area       Area
 	dragging   bool
-	hidden     bool
+	Visible    bool
 	background NPatchBox
 	button     Button
 }
@@ -64,7 +64,7 @@ func (w *Window) Setup(bottomBar *Bar) {
 }
 
 func (w *Window) Update() {
-	if w.hidden {
+	if !w.Visible {
 		return
 	}
 	w.Content.Update()
@@ -87,7 +87,7 @@ func (w *Window) Layout() {
 }
 
 func (w *Window) Draw() {
-	if w.hidden {
+	if !w.Visible {
 		return
 	}
 	contentArea := Area{
@@ -109,7 +109,7 @@ func (w *Window) Draw() {
 }
 
 func (w *Window) HideShow() {
-	w.hidden = !w.hidden
+	w.Visible = !w.Visible
 }
 
 func (w *Window) Dragging() {

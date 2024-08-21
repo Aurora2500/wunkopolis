@@ -21,7 +21,7 @@ func run_game() {
 	bottomBar := ui.Bar{}
 	assets.Manager.LoadFont("W95FA")
 
-	w1 := ui.Window{
+	windows := []ui.Window{{
 		Content: &ui.Flexbox{
 			Direction: ui.Col,
 			Border:    10,
@@ -39,18 +39,30 @@ func run_game() {
 		Title: "Statistics",
 		Area:  rl.Rectangle{Width: 620, Height: 900},
 		Icon:  assets.Manager.GetTexture("Statistics"),
+	},
+		{
+			Content: &ui.Scrollbox{},
+			Title:   "Map",
+			Area:    rl.Rectangle{Width: 1000, Height: 800},
+			Icon:    assets.Manager.GetTexture("Map"),
+		},
 	}
 
 	bottomBar.Setup()
-	w1.Setup(&bottomBar)
+	for i := range windows {
+		windows[i].Setup(&bottomBar)
+	}
 	for !rl.WindowShouldClose() {
-		w1.Update()
 		bottomBar.Update()
-
+		for i := range windows {
+			windows[i].Update()
+		}
 		rl.BeginDrawing()
 
 		rl.ClearBackground(backgroundColor)
-		w1.Draw()
+		for _, w := range windows {
+			w.Draw()
+		}
 		bottomBar.Draw()
 
 		rl.EndDrawing()
