@@ -4,12 +4,11 @@ import (
 	"errors"
 	"wunkopolis/assets"
 	"wunkopolis/ui"
+	"wunkopolis/variables"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 	lua "github.com/yuin/gopher-lua"
 )
-
-var Variables map[string]int
 
 var L *lua.LState
 
@@ -18,14 +17,12 @@ func init() {
 	defer L.Close()
 	L.DoFile("lua/main.lua")
 
-	Variables = make(map[string]int)
-
 	L.SetGlobal("SetVariable", L.NewFunction(setVaribleLua))
 
 }
 
 func setVaribleLua(L *lua.LState) int {
-	Variables[L.ToString(1)] = L.ToInt(2)
+	variables.Variables[L.ToString(1)] = L.ToInt(2)
 	return 0
 }
 
@@ -88,6 +85,18 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 	}
 
 	switch elementType {
+	case "Text":
+		{
+			content := ""
+			if str, ok := table.RawGetString("text").(lua.LString); ok {
+				content = string(str)
+			}
+			size := 16
+			if s, ok := table.RawGetString("size").(lua.LNumber); ok {
+				size = int(s)
+			}
+			return &ui.Text{Content: content, Size: float32(size)}, nil
+		}
 	case "Flexbox":
 		{
 			border := 10
@@ -97,6 +106,24 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 			direction := 0
 			if dir, ok := table.RawGetString("direction").(lua.LNumber); ok {
 				direction = int(dir)
+			}
+			background := ui.NPatchBox{}
+			if text, ok := table.RawGetString("background").(lua.LString); ok {
+				texture := assets.Manager.GetTexture(string(text))
+				background = ui.NPatchBox{
+					Texture: texture, NPatchInfo: rl.NPatchInfo{
+						Source: ui.Area{
+							X:      0,
+							Y:      0,
+							Width:  float32(texture.Width),
+							Height: float32(texture.Height),
+						},
+						Left:   int32(border),
+						Right:  int32(border),
+						Top:    int32(border),
+						Bottom: int32(border),
+					},
+				}
 			}
 			anchor := 0
 			if anc, ok := table.RawGetString("anchor").(lua.LNumber); ok {
@@ -116,13 +143,31 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 					}
 				}
 			}
-			return &ui.Flexbox{Direction: ui.FlexDirection(direction), Anchor: ui.FlexAnchor(anchor), Padding: padding, Elements: elements, Border: float32(border)}, nil
+			return &ui.Flexbox{Background: background, Direction: ui.FlexDirection(direction), Anchor: ui.FlexAnchor(anchor), Padding: padding, Elements: elements, Border: float32(border)}, nil
 		}
 	case "Scrollbox":
 		{
 			border := 10
 			if bor, ok := table.RawGetString("border").(lua.LNumber); ok {
 				border = int(bor)
+			}
+			background := ui.NPatchBox{}
+			if text, ok := table.RawGetString("background").(lua.LString); ok {
+				texture := assets.Manager.GetTexture(string(text))
+				background = ui.NPatchBox{
+					Texture: texture, NPatchInfo: rl.NPatchInfo{
+						Source: ui.Area{
+							X:      0,
+							Y:      0,
+							Width:  float32(texture.Width),
+							Height: float32(texture.Height),
+						},
+						Left:   int32(border),
+						Right:  int32(border),
+						Top:    int32(border),
+						Bottom: int32(border),
+					},
+				}
 			}
 			direction := 0
 			if dir, ok := table.RawGetString("direction").(lua.LNumber); ok {
@@ -142,7 +187,7 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 					}
 				}
 			}
-			return &ui.Scrollbox{Direction: ui.FlexDirection(direction), Padding: padding, Elements: elements, Border: float32(border)}, nil
+			return &ui.Scrollbox{Background: background, Direction: ui.FlexDirection(direction), Padding: padding, Elements: elements, Border: float32(border)}, nil
 		}
 	case "Button":
 		{
@@ -172,24 +217,6 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 				Text:     buttonText,
 			}, nil
 		}
-	case "Box":
-		{
-			red := 0
-			if r, ok := table.RawGetString("r").(lua.LNumber); ok {
-				red = int(r)
-			}
-			green := 0
-			if g, ok := table.RawGetString("g").(lua.LNumber); ok {
-				green = int(g)
-			}
-			blue := 0
-			if b, ok := table.RawGetString("b").(lua.LNumber); ok {
-				blue = int(b)
-			}
-
-			col := rl.NewColor(uint8(red), uint8(green), uint8(blue), 255)
-			return &ui.Box{Col: col}, nil
-		}
 	case "Tabs":
 		{
 			elements := []ui.UIElem{}
@@ -213,28 +240,6 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 			for i := len(tabNames) - 1; i < len(elements); i++ {
 				tabNames = append(tabNames, "")
 			}
-			border := 10
-			if bor, ok := table.RawGetString("borderSize").(lua.LNumber); ok {
-				border = int(bor)
-			}
-			background := ui.NPatchBox{}
-			if text, ok := table.RawGetString("background").(lua.LString); ok {
-				texture := assets.Manager.GetTexture(string(text))
-				background = ui.NPatchBox{
-					Texture: texture, NPatchInfo: rl.NPatchInfo{
-						Source: ui.Area{
-							X:      0,
-							Y:      0,
-							Width:  float32(texture.Width),
-							Height: float32(texture.Height),
-						},
-						Left:   int32(border),
-						Right:  int32(border),
-						Top:    int32(border),
-						Bottom: int32(border),
-					},
-				}
-			}
 			fontSize := 16
 			if fsize, ok := table.RawGetString("fontSize").(lua.LNumber); ok {
 				fontSize = int(fsize)
@@ -242,7 +247,6 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 			tabs := ui.Tabs{
 				Tabs:       elements,
 				TabButtons: ui.Flexbox{Anchor: ui.Center, Padding: 8},
-				Background: background,
 				TabNames:   tabNames,
 				FontSize:   float32(fontSize),
 			}
@@ -273,10 +277,18 @@ func toUIElem(table *lua.LTable) (ui.UIElem, error) {
 				Bottom: int32(border),
 			}}, nil
 		}
-
+	case "Image":
+		{
+			textureName := ""
+			if tex, ok := table.RawGetString("texture").(lua.LString); ok {
+				textureName = string(tex)
+			}
+			texture := assets.Manager.GetTexture(textureName)
+			return &ui.Image{Image: texture}, nil
+		}
 	}
 
-	return &ui.Box{}, errors.New("ui elemnt not found")
+	return &ui.NPatchBox{}, errors.New("ui elemnt not found")
 }
 
 func GetWindow(name string) (ui.Window, error) {

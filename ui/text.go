@@ -1,8 +1,11 @@
 package ui
 
 import (
+	"fmt"
 	"log"
 	"strings"
+	"wunkopolis/assets"
+	"wunkopolis/variables"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -25,7 +28,7 @@ type Text struct {
 }
 
 func (t *Text) Layout(area Area) {
-	font := t.Font
+	font := assets.Manager.LoadedFont
 	if !rl.IsFontReady(font) {
 		font = rl.GetFontDefault()
 	}
@@ -33,12 +36,11 @@ func (t *Text) Layout(area Area) {
 	if size == 0. {
 		size = float32(font.BaseSize)
 	}
+	t.lines = []string{}
 	spacing := size / float32(font.BaseSize)
-
 	widthLimit := area.Width
 	spaceWidth := rl.MeasureTextEx(t.Font, " ", size, spacing).X
-
-	for _, oLine := range strings.Split(t.Content, "\n") {
+	for _, oLine := range strings.Split(t.FormatString(), "\n") {
 		realLine := ""
 		var widthCurr float32
 
@@ -87,4 +89,21 @@ func (t *Text) Draw(ctx *Context) {
 	}
 	spacing := size / float32(font.BaseSize)
 	rl.DrawTextEx(font, strings.Join(t.lines, "\n"), rl.Vector2{X: t.RealSize.X, Y: t.RealSize.Y}, size, spacing, rl.Black)
+}
+
+func (t *Text) Update() {
+
+}
+func (t *Text) GetSize() Area {
+	return t.RealSize
+}
+
+func (t *Text) FormatString() string {
+	resultString := t.Content
+	for strings.Contains(resultString, "[") && strings.Contains(resultString, "]") {
+		before, result, _ := strings.Cut(resultString, "[")
+		id, after, _ := strings.Cut(result, "]")
+		resultString = strings.Join([]string{before, fmt.Sprint(variables.Variables[id]), after}, "")
+	}
+	return resultString
 }

@@ -10,7 +10,6 @@ type Tabs struct {
 	Tabs       []UIElem
 	TabNames   []string
 	TabButtons Flexbox
-	Background NPatchBox
 	FontSize   float32
 }
 
@@ -30,12 +29,6 @@ func (t *Tabs) Layout(area Area) {
 			Y:      area.Y + 50,
 		})
 	}
-	t.Background.Layout(Area{
-		Width:  area.Width,
-		Height: area.Height - 50,
-		X:      area.X,
-		Y:      area.Y + 50,
-	})
 }
 
 func (t *Tabs) GetSize() Area {
@@ -44,7 +37,6 @@ func (t *Tabs) GetSize() Area {
 
 func (t *Tabs) Draw(ctx *Context) {
 	t.TabButtons.Draw(ctx)
-	t.Background.Draw(ctx)
 	t.Tabs[t.Index].Draw(ctx)
 }
 

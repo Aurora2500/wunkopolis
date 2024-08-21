@@ -20,15 +20,17 @@ const (
 
 type Flexbox struct {
 	UIBase
-	Elements  []UIElem
-	Direction FlexDirection
-	Anchor    FlexAnchor
-	Padding   float32
-	Border    float32
+	Elements   []UIElem
+	Direction  FlexDirection
+	Anchor     FlexAnchor
+	Padding    float32
+	Border     float32
+	Background NPatchBox
 }
 
 func (fb *Flexbox) Layout(area Area) {
 	fb.RealSize = area
+	fb.Background.Layout(area)
 	fb.LayoutInside()
 }
 
@@ -78,7 +80,7 @@ func (fb *Flexbox) Update() {
 }
 
 func (fb *Flexbox) Draw(ctx *Context) {
-
+	fb.Background.Draw(ctx)
 	for _, elem := range fb.Elements {
 		elem.Draw(ctx)
 	}
@@ -99,12 +101,14 @@ type Scrollbox struct {
 	Direction      FlexDirection
 	Padding        float32
 	ScrollPosition float32
+	Background     NPatchBox
 	ScrollSize     float32
 	Border         float32
 }
 
 func (sb *Scrollbox) Layout(area Area) {
 	sb.RealSize = area
+	sb.Background.Layout(area)
 	sb.UpdateSize()
 	sb.LayoutInside()
 }
@@ -120,15 +124,22 @@ func (sb *Scrollbox) LayoutInside() {
 		elemoffset.Y -= sb.ScrollPosition
 	}
 	for _, elem := range sb.Elements {
-		elem.Layout(Area{
-			Width:  elem.GetSize().Width,
-			Height: elem.GetSize().Height,
-			X:      elemoffset.X,
-			Y:      elemoffset.Y,
-		})
+
 		if sb.Direction == Row {
+			elem.Layout(Area{
+				Width:  elem.GetSize().Width,
+				Height: sb.RealSize.Height,
+				X:      elemoffset.X,
+				Y:      elemoffset.Y,
+			})
 			elemoffset.X = elemoffset.X + elem.GetSize().Width + sb.Padding
 		} else {
+			elem.Layout(Area{
+				Width:  sb.RealSize.Width,
+				Height: elem.GetSize().Height,
+				X:      elemoffset.X,
+				Y:      elemoffset.Y,
+			})
 			elemoffset.Y = elemoffset.Y + elem.GetSize().Height + sb.Padding
 		}
 	}
@@ -148,6 +159,7 @@ func (sb *Scrollbox) Update() {
 }
 
 func (sb *Scrollbox) Draw(ctx *Context) {
+	sb.Background.Draw(ctx)
 	ctx.PushScissor(InsetArea(sb.RealSize, sb.Border))
 	for _, elem := range sb.Elements {
 		elem.Draw(ctx)
